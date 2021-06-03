@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31129.286
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IririApi", "IririApi\IririApi.csproj", "{CFA34AE0-0F1D-49F4-9D0D-5109C212048E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IririApi.Libs", "IririApi.Libs\IririApi.Libs.csproj", "{4A427A78-C7D6-44B4-BA1B-98C11C3F6E8C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CFA34AE0-0F1D-49F4-9D0D-5109C212048E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFA34AE0-0F1D-49F4-9D0D-5109C212048E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFA34AE0-0F1D-49F4-9D0D-5109C212048E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFA34AE0-0F1D-49F4-9D0D-5109C212048E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A427A78-C7D6-44B4-BA1B-98C11C3F6E8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A427A78-C7D6-44B4-BA1B-98C11C3F6E8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A427A78-C7D6-44B4-BA1B-98C11C3F6E8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A427A78-C7D6-44B4-BA1B-98C11C3F6E8C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5C77D6EE-BECD-4FEC-84B9-8737AE470057}
+	EndGlobalSection
+EndGlobal
