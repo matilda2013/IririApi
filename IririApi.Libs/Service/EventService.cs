@@ -122,12 +122,13 @@ namespace IririApi.Libs.Service
 
         }
 
-        public Guid ViewAllEventsAsync(Guid id)
-        {
-          var eventList = _eventrepository.GetById(id);
-            return eventList.EventId;
 
-        }
+        //public Guid ViewAllEventsAsync(Guid id)
+        //{
+        //  var eventList = _eventrepository.GetById(id);
+        //    return eventList.EventId;
+
+        //}
 
 
         public List<EventModel> ViewAllEventsAsync()
@@ -251,9 +252,11 @@ namespace IririApi.Libs.Service
 
 
         public HttpResponseMessage AddAnnoucementAsync(Announcement model)
-    {
-        try
         {
+      
+            
+            try
+            {   
             var result = new Announcement();
 
             result.AnnouceDate = model.AnnouceDate;
@@ -285,7 +288,7 @@ namespace IririApi.Libs.Service
 
                 if (myevent == null)
                 {
-                    throw new ObjectNotFoundException($"No EventDue With id{id} exists");
+                    throw new ObjectNotFoundException($"No Annoucement With id{id} exists");
                 }
 
                 else

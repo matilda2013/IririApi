@@ -10,7 +10,6 @@ namespace IririApi.Libs.ViewModel
     {
         public string MembershipId { get; set; }
         public int NumberOfMonths { get; set; }
-
         public string Amount { get; set; }
         public DateTime DatePaid { get; set; }
     }

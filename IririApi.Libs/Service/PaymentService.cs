@@ -40,6 +40,7 @@ namespace IririApi.Libs.Service
                 result.emailAddress = email;
                 result.gateway_response = eventTransaction.gateway_response;
                 result.PaymentMethod = eventTransaction.PaymentMethod;
+                result.PaymentPlanName = eventTransaction.PaymentPlanName;
                 result.requestReference = eventTransaction.requestReference;
                 result.paid_at = eventTransaction.paid_at;
                 result.created_at = eventTransaction.created_at;

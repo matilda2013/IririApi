@@ -22,6 +22,8 @@ namespace IririApi.Libs.Model
         public string emailAddress { get; set; }
         public string requestReference { get; set; }
 
+        public string PaymentPlanName { get; set; }
+
         public bool status { get; set; }
         
         public string PaymentMethod { get; set; }

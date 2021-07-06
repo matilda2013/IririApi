@@ -19,7 +19,7 @@ namespace IririApi.Libs.Model
         }
 
         public DbSet<MemberRegistrationUser> MemberRegistrationUsers { get; set; }
-     
+
         public DbSet<Gallery> Gallerys { get; set; }
 
         public DbSet<EventModel> EventModels { get; set; }
@@ -31,12 +31,14 @@ namespace IririApi.Libs.Model
 
         public DbSet<PaymentGatewayStore> PaymentGatewayStores { get; set; }
 
-     
+
         public DbSet<Preference> Preferences { get; set; }
 
         public DbSet<Announcement> Annoucements { get; set; }
 
         public DbSet<Due> Dues { get; set; }
+
+        public DbSet<PaymentPlan> PaymentPlans{ get; set; }
     }
 
 }

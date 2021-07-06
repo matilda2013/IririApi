@@ -125,7 +125,7 @@ namespace IririApi.Controllers
         }
 
           async Task<ActionResult> VerifyPaystackPayment(string reference)
-        {
+          {
             var responseStatus = new TransactionStatusViewModel();
             responseStatus.paymentmethod = "Paystack";
             responseStatus.reference = reference;

@@ -39,8 +39,6 @@ namespace IririApi.Controllers
             {
                 string myFileName = UploadedEventFile(model);
 
-
-
                 var result = new EventModel();
 
                 result.EventTitle = model.EventTitle;
