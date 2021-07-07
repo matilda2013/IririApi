@@ -55,6 +55,12 @@ namespace IririApi.Controllers
 
         }
 
+        [HttpGet]
+        [Route("ViewMemberById")]
+        public async Task GetMembersById(string id)
+        {
+             await _userAccountService.ViewMembersByIdAsync(id);
+        }
 
         [HttpPost]
         [Route("RegisterMember")]

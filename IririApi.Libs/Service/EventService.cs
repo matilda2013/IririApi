@@ -122,13 +122,13 @@ namespace IririApi.Libs.Service
 
         }
 
+       
+        public Guid ViewEventsByIdAsync(Guid id)
+        {
+            var eventList = _eventrepository.GetById(id);
+            return eventList.EventId;
 
-        //public Guid ViewAllEventsAsync(Guid id)
-        //{
-        //  var eventList = _eventrepository.GetById(id);
-        //    return eventList.EventId;
-
-        //}
+        }
 
 
         public List<EventModel> ViewAllEventsAsync()
@@ -138,6 +138,21 @@ namespace IririApi.Libs.Service
 
         }
 
+
+        public List<EventModel> ViewPastEventsAsync()
+        {
+            var eventList = _eventrepository.GetAll(y => y.Date < DateTime.Now);
+            return eventList.ToList();
+
+        }
+
+        public List<EventModel> ViewUpcomingEventsAsync()
+        {
+          
+            var eventList = _eventrepository.GetAll(x => x.Date > DateTime.Now);
+            return eventList.ToList();
+
+        }
 
         public HttpResponseMessage AddEventDuesAsync(Due model, string MemberId)
         {

@@ -120,6 +120,13 @@ namespace IririApi.Libs.Service
         }
 
 
+        public async Task<string> ViewMembersByIdAsync(string userEmail)
+        {
+            var user = await  _userManager.FindByNameAsync(userEmail);
+            var Id = user.Id;
+            return Id;
+
+        }
 
         public async Task<bool> SendConfirmRegistrationMail(string userEmail)
         {

@@ -106,6 +106,27 @@ namespace IririApi.Controllers
         }
 
 
+        [HttpGet]
+        [Route("ViewEventsById")]
+        public Guid  GetEventsById(Guid id)
+        {
+            return _eventService.ViewEventsByIdAsync(id);
+        }
+
+
+        [HttpGet]
+        [Route("ViewPastEvents")]
+        public List<EventModel> GetPastEvents()
+        {
+            return _eventService.ViewPastEventsAsync();
+        }
+
+        [HttpGet]
+        [Route("ViewUpcomingEvents")]
+        public List<EventModel> GetUpComingEvents()
+        {
+            return _eventService.ViewUpcomingEventsAsync();
+        }
 
         [HttpPost]
         [Route("SetUpEventDues")]
