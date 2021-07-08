@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
@@ -125,6 +126,68 @@ namespace IririApi.Libs.Service
             var user = await  _userManager.FindByNameAsync(userEmail);
             var Id = user.Id;
             return Id;
+
+        }
+
+        public MemberUserViewModel ViewMembersByCardNoAsync(string id)
+        {
+            MemberRegistrationUser myMemberCard = _DbContext.MemberRegistrationUsers.FirstOrDefault(e => e.CardNo == id);
+
+            var user = new MemberUserViewModel()
+            {
+                MemId = myMemberCard.Id,
+                FirstName = myMemberCard.FirstName,
+                LastName = myMemberCard.LastName,
+                MemberEmail = myMemberCard.MemberEmail,
+                MemberAddress = myMemberCard.MemberAddress,
+                MemberPhone = myMemberCard.MemberPhone,
+                Gender = myMemberCard.Gender
+              
+
+            };
+
+  
+            return user;
+
+        }
+
+        public async Task<HttpResponseMessage> TieMembersByCardNoAsync(string userEmail, string CardNo)
+        {
+            try
+            {
+                var user = await _userManager.FindByNameAsync(userEmail);
+                var memId = user.Id;
+                
+
+                MemberRegistrationUser myMember = _DbContext.MemberRegistrationUsers.FirstOrDefault(e => e.Id == memId);
+
+                if (myMember == null)
+                {
+                    throw new ObjectNotFoundException($"No Member With id{memId} exists");
+                }
+
+                else
+                {
+                    myMember.CardNo = CardNo;
+                   
+
+                    _DbContext.SaveChanges();
+                    var response = new HttpResponseMessage();
+                    response.Headers.Add("UpdateMessage", "Successfuly Updated!!!");
+                    return response;
+
+
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+
+            }
+
+        
 
         }
 

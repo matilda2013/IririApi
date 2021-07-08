@@ -57,10 +57,28 @@ namespace IririApi.Controllers
 
         [HttpGet]
         [Route("ViewMemberById")]
-        public async Task GetMembersById(string id)
+        public async Task GetMembersById(string email)
         {
-             await _userAccountService.ViewMembersByIdAsync(id);
+             await _userAccountService.ViewMembersByIdAsync(email);
         }
+
+        [HttpPut]
+        [Route("TieMemberByCardNo")]
+        public async Task TieMembersByCardNo(string email, string CardNo)
+        {
+            await _userAccountService.TieMembersByCardNoAsync(email,CardNo);
+        }
+
+        [HttpGet]
+        [Route("ViewMemberByCardNo")]
+        public MemberUserViewModel GetMembersByCardNo(string id)
+        {
+           return _userAccountService.ViewMembersByCardNoAsync(id);
+        }
+
+
+      
+
 
         [HttpPost]
         [Route("RegisterMember")]

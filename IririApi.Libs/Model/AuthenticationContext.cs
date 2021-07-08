@@ -36,6 +36,10 @@ namespace IririApi.Libs.Model
 
         public DbSet<Due> Dues { get; set; }
 
+        public DbSet<EventPaymentPlan> EventPaymentPlans { get; set; }
+
+        public DbSet<MembershipPlanPayment> MembershipPlanPayments { get; set; }
+
         public DbSet<PaymentPlan> PaymentPlans{ get; set; }
     }
 

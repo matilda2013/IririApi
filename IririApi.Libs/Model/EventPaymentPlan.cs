@@ -7,12 +7,14 @@ using System.Threading.Tasks;
 
 namespace IririApi.Libs.Model
 {
-    public class PaymentPlan
+    public class EventPaymentPlan
     {
         [Key]
-        public Guid PaymentPlanId { get; set; }
+        public Guid EventPaymentPlanId { get; set; }
+        public string MembershipId { get; set; }
         public string PaymentPlanName { get; set; }
-        public double cost { get; set; }
+        public DateTime DatePaid { get; set; }
+        public double amount { get; set; }
         public string Description { get; set; }
 
     }

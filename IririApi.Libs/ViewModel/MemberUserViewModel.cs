@@ -11,7 +11,7 @@ namespace IririApi.Libs.ViewModel
 {
     public class MemberUserViewModel
     {
-        //public string Id { get; set; }
+        public string MemId { get; set; }
 
         [Column(TypeName = "nvarchar(130)")]
         public string FirstName { get; set; }
