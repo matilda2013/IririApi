@@ -57,9 +57,9 @@ namespace IririApi.Controllers
 
         [HttpGet]
         [Route("ViewMemberById")]
-        public async Task GetMembersById(string email)
+        public MemberUserViewModel GetMembersById(string email)
         {
-             await _userAccountService.ViewMembersByIdAsync(email);
+             return _userAccountService.ViewMembersByIdAsync(email);
         }
 
         [HttpPut]
@@ -85,7 +85,7 @@ namespace IririApi.Controllers
        
         public async Task PostMemberUser([FromBody]MemberUserViewModel model)
         {
-            model.Role = "Member";
+           // model.Role = "Member";
 
 
             ArgumentGuard.NotNullOrEmpty(model.FirstName, nameof(model.FirstName));

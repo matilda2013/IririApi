@@ -36,7 +36,7 @@ namespace IririApi.Libs.Service
 
         public  async Task AddNewMemberAsync(MemberUserViewModel model)
         {
-            model.Role = "Member";
+          //  model.Role = "Admin";
 
             var MemberUser = new MemberRegistrationUser()
             {
@@ -51,8 +51,8 @@ namespace IririApi.Libs.Service
                 Role = UserRole.MemberUser,
                 DOB = model.DOB,
                 Occupation = model.Occupation,
-                CardNo = model.CardNo,
-                Status = model.Status,
+               // CardNo = model.CardNo,
+               // Status = model.Status,
                 CreatedAt = DateTime.Now,
                 CreatedBy = model.MemberEmail,
                 IsPasswordChangeRequired = true,
@@ -63,7 +63,7 @@ namespace IririApi.Libs.Service
             try
             {
                 var result = await _userManager.CreateAsync(MemberUser, model.Password);
-                await _userManager.AddToRoleAsync(MemberUser, model.Role);
+                await _userManager.AddToRoleAsync(MemberUser, "Admin");
 
             }
             catch (Exception ex)
