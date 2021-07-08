@@ -11,6 +11,6 @@ namespace IririApi.Libs.Model.IService
     {
         Task RegisterAdminUserAsync(MemberUserViewModel model);
         Task RegisterMemberUserAsync(MemberUserViewModel model);
-        Task<string> ViewMembersByIdAsync(string userEmail)
+        Task<string> ViewMembersByIdAsync(string userEmail);
     }
 }

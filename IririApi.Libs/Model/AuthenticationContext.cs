@@ -28,9 +28,7 @@ namespace IririApi.Libs.Model
 
         public DbSet<EventPayment> EventPayments { get; set; }
 
-
         public DbSet<PaymentGatewayStore> PaymentGatewayStores { get; set; }
-
 
         public DbSet<Preference> Preferences { get; set; }
 

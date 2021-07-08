@@ -227,6 +227,41 @@ namespace IririApi.Controllers
             return myFileName;
         }
 
+        [HttpGet("GetEventImageByName")]
+        public IActionResult GetEventImage(string fileName)
+        {
+            try
+            {
+
+                string filepath = Path.Combine($"{webHostEnvironment.ContentRootPath}/Asset/images", $"{fileName}");
+
+                var fileBytes = System.IO.File.ReadAllBytes(filepath);
+                var fileMemStream =
+                    new MemoryStream(fileBytes);
+
+
+                return File(fileMemStream, "application/octet-stream", fileName);
+            }
+            catch (Exception e)
+            {
+                string filename = "NoImage.png";
+
+                var filePath = Path.Combine(webHostEnvironment.ContentRootPath, filename);
+
+
+                var fileBytes = System.IO.File.ReadAllBytes(filePath);
+
+
+                var fileMemStream =
+                    new MemoryStream(fileBytes);
+
+
+                return File(fileMemStream, "application/octet-stream", filename);
+            }
+        }
+
+
+
 
 
         [HttpGet]
