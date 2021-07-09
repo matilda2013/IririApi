@@ -130,8 +130,7 @@ namespace IririApi.Controllers
             {
                 var role = await _userManager.GetRolesAsync(user);
        
-                var Username = await _userManager.FindByEmailAsync(model.UserName);
-                var memberId = Username.Id;
+                 var memberId = user.Id;
 
                 IdentityOptions _options = new IdentityOptions();
 
