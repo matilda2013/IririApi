@@ -122,11 +122,28 @@ namespace IririApi.Libs.Service
 
         }
 
-       
-        public Guid ViewEventsByIdAsync(Guid id)
+      
+
+
+        public EventViewModel ViewEventsByIdAsync(Guid id)
         {
-            var eventList = _eventrepository.GetById(id);
-            return eventList.EventId;
+
+
+            EventModel myevent = _DbContext.EventModels.FirstOrDefault(e => e.EventId == id);
+
+            var eventresult = new EventViewModel()
+            {
+                EventTitle = myevent.EventTitle,
+                EventVenue = myevent.EventVenue,
+                Amount= myevent.Amount,
+                EventDescription = myevent.EventDescription
+           
+
+
+            };
+
+
+            return eventresult;
 
         }
 

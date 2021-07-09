@@ -108,7 +108,7 @@ namespace IririApi.Controllers
 
         [HttpGet]
         [Route("ViewEventsById")]
-        public Guid  GetEventsById(Guid id)
+        public EventViewModel GetEventsById(Guid id)
         {
             return _eventService.ViewEventsByIdAsync(id);
         }

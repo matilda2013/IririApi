@@ -85,7 +85,7 @@ namespace IririApi.Controllers
        
         public async Task PostMemberUser([FromBody]MemberUserViewModel model)
         {
-           // model.Role = "Member";
+          
 
 
             ArgumentGuard.NotNullOrEmpty(model.FirstName, nameof(model.FirstName));
@@ -151,7 +151,7 @@ namespace IririApi.Controllers
                 var token = tokenHandler.WriteToken(securityToken);
 
 
-                return Ok(new { token });
+                return Ok(new { token,role });
 
 
             }

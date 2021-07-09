@@ -12,8 +12,9 @@ namespace IririApi.Libs.Model.IService
     public interface IEventService
     {
 
-        // Guid ViewAllEventsAsync(Guid id);
-        Guid ViewEventsByIdAsync(Guid id);
+   
+        EventViewModel ViewEventsByIdAsync(Guid id);
+  
 
         List<EventModel> ViewPastEventsAsync();
        
