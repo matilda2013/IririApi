@@ -104,7 +104,7 @@ namespace IririApi.Controllers
         [HttpPost]
         [Route("Login")]
        
-        public async Task<IActionResult> Login(LoginModel model)
+        public async Task<IActionResult> Login([FromForm] LoginModel model)
         {
 
             MemberRegistrationUser user = await _userManager.FindByEmailAsync(model.UserName);
@@ -129,6 +129,10 @@ namespace IririApi.Controllers
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
                 var role = await _userManager.GetRolesAsync(user);
+       
+                var Username = await _userManager.FindByEmailAsync(model.UserName);
+                var memberId = Username.Id;
+
                 IdentityOptions _options = new IdentityOptions();
 
                 var tokenDescriptor = new SecurityTokenDescriptor()
@@ -151,10 +155,11 @@ namespace IririApi.Controllers
                 var token = tokenHandler.WriteToken(securityToken);
 
 
-                return Ok(new { token,role });
+                return Ok(new { token,role,memberId });
 
 
             }
+            
             else
 
                 return BadRequest(new { message = " Invalid Login Credentials " });
