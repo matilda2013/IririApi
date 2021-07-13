@@ -16,6 +16,7 @@ namespace IririApi.Libs.Model.IService
         MemberUserTracker ViewMembersByIdAsync(string userEmail);
      
         Task<HttpResponseMessage> TieMembersByCardNoAsync(string userEmail,string CardNo);
+     
         MemberUserTracker ViewMembersByCardNoAsync(string id);
     }
 }

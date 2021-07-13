@@ -64,7 +64,14 @@ namespace IririApi.Libs.Service
             {
                 var result = await _userManager.CreateAsync(MemberUser, model.Password);
                 await _userManager.AddToRoleAsync(MemberUser, "Admin");
-        
+                var resp = await SendConfirmRegistrationMail(MemberUser.Email);
+
+                if (!resp)
+                {
+
+                    throw new ObjectNotFoundException($"Couldn't Send Confirmation Email. Attempt to Login to resend confirmation link");
+                }
+
             }
             catch (Exception ex)
             {
@@ -202,7 +209,7 @@ namespace IririApi.Libs.Service
 
                     _DbContext.SaveChanges();
                     var response = new HttpResponseMessage();
-                    response.Headers.Add("UpdateMessage", "Successfuly Updated!!!");
+                    response.Headers.Add("UpdateMessage", "Successfully Updated!!!");
                     return response;
 
 
