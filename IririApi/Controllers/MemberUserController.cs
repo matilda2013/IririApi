@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using IririApi.Libs.DTOs;
 using IririApi.Libs.Helpers;
 using IririApi.Libs.Model;
 using IririApi.Libs.Model.IService;
@@ -57,7 +58,7 @@ namespace IririApi.Controllers
 
         [HttpGet]
         [Route("ViewMemberById")]
-        public MemberUserViewModel GetMembersById(string email)
+        public MemberUserTracker GetMembersById(string email)
         {
              return _userAccountService.ViewMembersByIdAsync(email);
         }
@@ -71,7 +72,7 @@ namespace IririApi.Controllers
 
         [HttpGet]
         [Route("ViewMemberByCardNo")]
-        public MemberUserViewModel GetMembersByCardNo(string id)
+        public MemberUserTracker GetMembersByCardNo(string id)
         {
            return _userAccountService.ViewMembersByCardNoAsync(id);
         }

@@ -1,4 +1,5 @@
 ﻿using IririApi.Libs.Bootstrap.Exceptions;
+using IririApi.Libs.DTOs;
 using IririApi.Libs.Infrastructure.Concrete;
 using IririApi.Libs.Infrastructure.Contract;
 using IririApi.Libs.Inteface.IService;
@@ -121,13 +122,13 @@ namespace IririApi.Libs.Service
         }
 
 
-        public MemberUserViewModel ViewMembersByIdAsync(string userEmail)
+        public MemberUserTracker ViewMembersByIdAsync(string userEmail)
         {
          
 
             MemberRegistrationUser myMemberCard = _DbContext.MemberRegistrationUsers.FirstOrDefault(e => e.Email == userEmail);
 
-            var user = new MemberUserViewModel()
+            var user = new MemberUserTracker()
             {
                 //MemId = myMemberCard.Id,
                 FirstName = myMemberCard.FirstName,
@@ -135,7 +136,13 @@ namespace IririApi.Libs.Service
                 MemberEmail = myMemberCard.MemberEmail,
                 MemberAddress = myMemberCard.MemberAddress,
                 MemberPhone = myMemberCard.MemberPhone,
-                Gender = myMemberCard.Gender
+                Gender = myMemberCard.Gender,
+                Occupation = myMemberCard.Occupation,
+                DOB = myMemberCard.DOB,
+                CardNo= myMemberCard.CardNo,
+                CreatedAt =myMemberCard.CreatedAt,
+                CreatedBy=myMemberCard.CreatedBy
+                
 
 
             };
@@ -145,11 +152,11 @@ namespace IririApi.Libs.Service
 
         }
 
-        public MemberUserViewModel ViewMembersByCardNoAsync(string id)
+        public MemberUserTracker ViewMembersByCardNoAsync(string id)
         {
             MemberRegistrationUser myMemberCard = _DbContext.MemberRegistrationUsers.FirstOrDefault(e => e.CardNo == id);
 
-            var user = new MemberUserViewModel()
+            var user = new MemberUserTracker()
             {
                 //MemId = myMemberCard.Id,
                 FirstName = myMemberCard.FirstName,
@@ -157,8 +164,14 @@ namespace IririApi.Libs.Service
                 MemberEmail = myMemberCard.MemberEmail,
                 MemberAddress = myMemberCard.MemberAddress,
                 MemberPhone = myMemberCard.MemberPhone,
-                Gender = myMemberCard.Gender
-              
+                Gender = myMemberCard.Gender,
+                Occupation = myMemberCard.Occupation,
+                DOB = myMemberCard.DOB,
+                CardNo = myMemberCard.CardNo,
+                CreatedAt = myMemberCard.CreatedAt,
+                CreatedBy = myMemberCard.CreatedBy
+
+
 
             };
 

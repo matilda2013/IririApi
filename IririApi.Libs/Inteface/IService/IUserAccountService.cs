@@ -1,4 +1,5 @@
-﻿using IririApi.Libs.ViewModel;
+﻿using IririApi.Libs.DTOs;
+using IririApi.Libs.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,9 @@ namespace IririApi.Libs.Model.IService
     {
         Task RegisterAdminUserAsync(MemberUserViewModel model);
         Task RegisterMemberUserAsync(MemberUserViewModel model);
-        MemberUserViewModel ViewMembersByIdAsync(string userEmail);
+        MemberUserTracker ViewMembersByIdAsync(string userEmail);
      
         Task<HttpResponseMessage> TieMembersByCardNoAsync(string userEmail,string CardNo);
-        MemberUserViewModel ViewMembersByCardNoAsync(string id);
+        MemberUserTracker ViewMembersByCardNoAsync(string id);
     }
 }
