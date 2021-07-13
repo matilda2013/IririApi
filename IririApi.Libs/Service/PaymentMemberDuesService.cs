@@ -1,4 +1,5 @@
-﻿using IririApi.Libs.DTOs;
+﻿using IririApi.Libs.Bootstrap.Exceptions;
+using IririApi.Libs.DTOs;
 using IririApi.Libs.Infrastructure.Concrete;
 using IririApi.Libs.Infrastructure.Contract;
 using IririApi.Libs.Inteface.IService;
@@ -7,6 +8,7 @@ using IririApi.Libs.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -55,27 +57,48 @@ namespace IririApi.Libs.Service
         }
 
        
-
         public DuePaymentTracker ViewDuePaymentsMemberByIdAsync(string id)
         {
 
 
-            MembershipPlanPayment myevent = _DbContext.MembershipPlanPayments.FirstOrDefault(e => e.MembershipId == id);
-
-
-            var eventresult = new DuePaymentTracker()
+            try
             {
-                PaymentPlanName = myevent.PaymentPlanName,
-                MemberName = myevent.MemberName,
-                amount = myevent.amount,
-                paymentReference = myevent.paymentReference,
-                DatePaid = myevent.DatePaid
+                MembershipPlanPayment myevent =  _DbContext.MembershipPlanPayments.FirstOrDefault(e => e.MembershipId == id);
 
 
-            };
+                if (myevent == null)
+                {
+                    throw new ObjectNotFoundException($"Member With id{id} has not made payment");
 
 
-            return eventresult;
+                }
+
+                var eventresult = new DuePaymentTracker()
+                    {
+                        PaymentPlanName = myevent.PaymentPlanName,
+                        MemberName = myevent.MemberName,
+                        amount = myevent.amount,
+                        paymentReference = myevent.paymentReference,
+                        DatePaid = myevent.DatePaid
+
+
+                    };
+             
+
+
+                return eventresult;
+
+
+                
+            }
+
+            catch (Exception ex)
+            {
+                
+                throw ex;
+
+            }
+
 
         }
 

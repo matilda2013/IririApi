@@ -14,9 +14,7 @@ namespace IririApi.Libs.Model.IService
         Task RegisterAdminUserAsync(MemberUserViewModel model);
         Task RegisterMemberUserAsync(MemberUserViewModel model);
         MemberUserTracker ViewMembersByIdAsync(string userEmail);
-     
         Task<HttpResponseMessage> TieMembersByCardNoAsync(string userEmail,string CardNo);
-     
         MemberUserTracker ViewMembersByCardNoAsync(string id);
     }
 }

@@ -14,5 +14,6 @@ namespace IririApi.Libs.Inteface.IService
         void AddPayment(MembershipPlanViewModel eventTransaction, string email, string custName, string phoneNumber, string MemberId);
 
         DuePaymentTracker ViewDuePaymentsMemberByIdAsync(string id);
+      
     }
 }

@@ -174,7 +174,7 @@ namespace IririApi.Controllers
         [Route("ViewMemberDuesPaymentsById")]
         public DuePaymentTracker GetMemberDuePaymentByMemberId(string id)
         {
-            return _paymentService.ViewDuePaymentsMemberByIdAsync(id);
+            return  _paymentService.ViewDuePaymentsMemberByIdAsync(id);
         }
 
 
