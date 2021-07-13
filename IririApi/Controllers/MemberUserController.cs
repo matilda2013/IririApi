@@ -65,9 +65,12 @@ namespace IririApi.Controllers
 
         [HttpPut]
         [Route("TieMemberByCardNo")]
-        public async Task TieMembersByCardNo(string email, string CardNo)
+        //public async Task TieMembersByCardNo(string email, string CardNo)
+        public async Task TieMembersByCardNo(TieCardViewModel model)
+     
         {
-            await _userAccountService.TieMembersByCardNoAsync(email,CardNo);
+            await _userAccountService.TieMembersByCardNoAsync(model.email, model.CardNo);
+         //   await _userAccountService.TieMembersByCardNoAsync(email,CardNo);
         }
 
         [HttpGet]
