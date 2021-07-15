@@ -43,5 +43,9 @@ namespace IririApi.Libs.Model.IService
         HttpResponseMessage UploadImageToGalleryAsync(Gallery model);
 
         List<Gallery> ViewGalleryAsync();
+
+        HttpResponseMessage ApproveEventAsync(Guid EventId, bool status);
+
+        List<EventModel> ViewAllPendingEventsAsync();
     }
 }

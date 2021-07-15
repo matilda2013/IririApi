@@ -32,9 +32,12 @@ namespace IririApi.Libs.Model
 
         public DateTime DOB { get; set; }
 
-        public bool Status { get; set; }
+        public string Status { get; set; }
 
         public string CardNo { get; set; }
+
+        public string Plan { get; set; }
+        public decimal Amount { get; set; }
 
         public DateTime CreatedAt { get; set; }
 
@@ -47,7 +50,7 @@ namespace IririApi.Libs.Model
 
         public UserRole Role { get; set; }
 
-
+        public string randPassword { get; set; }
 
     }
 }

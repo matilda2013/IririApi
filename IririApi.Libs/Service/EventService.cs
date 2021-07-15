@@ -150,15 +150,62 @@ namespace IririApi.Libs.Service
 
         public List<EventModel> ViewAllEventsAsync()
         {
+
             var eventList = _eventrepository.GetAll();
             return eventList.ToList();
 
         }
 
+        public List<EventModel> ViewAllPendingEventsAsync()
+        {
+
+            var eventList = _eventrepository.GetAll(x => x.status == false);
+            return eventList.ToList();
+
+        }
+
+        public HttpResponseMessage ApproveEventAsync(Guid EventId, bool status)
+
+        {
+            try
+            {
+           
+
+                EventModel myevent = _DbContext.EventModels.FirstOrDefault(e => e.EventId == EventId);
+
+                if (myevent == null)
+                {
+                    throw new ObjectNotFoundException($"No Event With id{EventId} exists");
+                }
+
+                else
+                {
+                    myevent.status = status;
+
+
+                    _DbContext.SaveChanges();
+                    var response = new HttpResponseMessage();
+                    response.Headers.Add("ApproveMessage", "Event Successfully Approved!!!");
+                    return response;
+
+
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+
+            }
+
+
+
+        }
 
         public List<EventModel> ViewPastEventsAsync()
         {
-            var eventList = _eventrepository.GetAll(y => y.Date < DateTime.Now);
+            var eventList = _eventrepository.GetAll(y => y.Date < DateTime.Now && y.status== true);
             return eventList.ToList();
 
         }
@@ -166,7 +213,7 @@ namespace IririApi.Libs.Service
         public List<EventModel> ViewUpcomingEventsAsync()
         {
           
-            var eventList = _eventrepository.GetAll(x => x.Date > DateTime.Now);
+            var eventList = _eventrepository.GetAll(x => x.Date > DateTime.Now && x.status == true);
             return eventList.ToList();
 
         }

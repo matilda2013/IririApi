@@ -25,6 +25,8 @@ namespace IririApi.Libs.Model
 
         public double Amount { get; set; }
 
+        public bool status { get; set; }
+
 
     }
 }

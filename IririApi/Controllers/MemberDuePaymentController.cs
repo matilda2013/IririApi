@@ -61,7 +61,8 @@ namespace IririApi.Controllers
                 var custName =  Username.FirstName + " " + Username.LastName;
                 var MemberId = Username.Id;
 
-            var callback = "https://localhost:44312/api/Payment/VerifyPaystackPayment";
+
+                var callback = "https://localhost:44312/api/Payment/VerifyPaystackPayment"; 
 
                 //PAYSTACK AMOUNT IS IN KOBO
                 var requestObj = new { amount = (amount * 100).ToString(), email, callback };

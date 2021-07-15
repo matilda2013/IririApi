@@ -193,9 +193,7 @@ namespace IririApi.Libs.Service
             try
             {
                 var user = await _userManager.FindByNameAsync(userEmail);
-                //MemberRegistrationUser myMember1 = _DbContext.MemberRegistrationUsers.FirstOrDefault(e => e.Email == userEmail);
-
-              //  var memId = myMember1.Id;
+         
                 var memId = user.Id;
                 
 

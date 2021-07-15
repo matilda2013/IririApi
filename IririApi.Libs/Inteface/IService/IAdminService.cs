@@ -14,6 +14,13 @@ namespace IririApi.Libs.Model.IService
         Task AddNewMemberAsync(MemberUserViewModel model);
 
         HttpResponseMessage DeleteMemberAsync(string id);
+
+
+        List<MemberRegistrationUser> GetPendingRegistrationsAsync();
+     
+        public Task<HttpResponseMessage> ApproveMemberAsync(string email);
+        public Task<HttpResponseMessage> ActivateMemberAsync(string email);
+        Task<bool> SendMail(string email, string subject, string body);
     }
 
 }
