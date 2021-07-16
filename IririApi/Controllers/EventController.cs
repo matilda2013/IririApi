@@ -112,12 +112,20 @@ namespace IririApi.Controllers
             return _eventService.ViewAllPendingEventsAsync();
         }
 
+        [HttpGet]
+        [Route("GetAllApprovedEvents")]
+        public List<EventModel> GetAllApprovedEvents()
+        {
+            return _eventService.ViewAllApprovedEventsAsync();
+        }
+
+
         [HttpPut]
         [Route("ApproveEvent")]
         
         public HttpResponseMessage ApproveEvent(ApproveEventViewModel model)
         {
-            return _eventService.ApproveEventAsync(model.EventId, model.status);
+            return _eventService.ApproveEventAsync(model.EventId);
          
         }
 

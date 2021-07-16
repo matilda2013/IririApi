@@ -164,7 +164,15 @@ namespace IririApi.Libs.Service
 
         }
 
-        public HttpResponseMessage ApproveEventAsync(Guid EventId, bool status)
+
+        public List<EventModel> ViewAllApprovedEventsAsync()
+        {
+
+            var eventList = _eventrepository.GetAll(x => x.status == true);
+            return eventList.ToList();
+
+        }
+        public HttpResponseMessage ApproveEventAsync(Guid EventId)
 
         {
             try
@@ -173,6 +181,8 @@ namespace IririApi.Libs.Service
 
                 EventModel myevent = _DbContext.EventModels.FirstOrDefault(e => e.EventId == EventId);
 
+               
+
                 if (myevent == null)
                 {
                     throw new ObjectNotFoundException($"No Event With id{EventId} exists");
@@ -180,7 +190,7 @@ namespace IririApi.Libs.Service
 
                 else
                 {
-                    myevent.status = status;
+                    myevent.status = true;
 
 
                     _DbContext.SaveChanges();

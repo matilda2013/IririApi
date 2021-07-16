@@ -44,8 +44,10 @@ namespace IririApi.Libs.Model.IService
 
         List<Gallery> ViewGalleryAsync();
 
-        HttpResponseMessage ApproveEventAsync(Guid EventId, bool status);
+        HttpResponseMessage ApproveEventAsync(Guid EventId);
 
         List<EventModel> ViewAllPendingEventsAsync();
+
+        List<EventModel> ViewAllApprovedEventsAsync();
     }
 }
