@@ -56,7 +56,7 @@ namespace IririApi.Libs.Service
                 DOB = model.DOB,
                 Occupation = model.Occupation,
                // CardNo = model.CardNo,
-               // Status = model.Status,
+               Status = "Pending",
                 CreatedAt = DateTime.Now,
                 CreatedBy = model.MemberEmail,
                 IsPasswordChangeRequired = true,
@@ -66,7 +66,7 @@ namespace IririApi.Libs.Service
 
             try
             {
-                var result = await _userManager.CreateAsync(MemberUser, model.Password);
+                var result = await _userManager.CreateAsync(MemberUser);
                 await _userManager.AddToRoleAsync(MemberUser, "Admin");
 
             }
@@ -129,6 +129,14 @@ namespace IririApi.Libs.Service
         public List<MemberRegistrationUser> GetPendingRegistrationsAsync()
         {
             var memList = _adminrepository.GetAll(x => x.Status == "Pending");
+            return memList.ToList();
+        }
+
+
+
+        public List<MemberRegistrationUser> GetActiveMemberAsync()
+        {
+            var memList = _adminrepository.GetAll(x => x.Status == "Approved");
             return memList.ToList();
         }
 

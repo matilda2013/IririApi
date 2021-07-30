@@ -15,7 +15,7 @@ namespace IririApi.Libs.ViewModel
         public string PaymentPlanName { get; set; }
         public string emailAddress { get; set; }
 
-        public decimal amount { get; set; }
+        public double amount { get; set; }
         public string Description { get; set; }
 
         public string phoneNumber { get; set; }

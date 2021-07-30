@@ -62,7 +62,7 @@ namespace IririApi.Libs.Service
 
             try
             {
-                var result = await _userManager.CreateAsync(MemberUser, model.Password);
+                var result = await _userManager.CreateAsync(MemberUser);
                 await _userManager.AddToRoleAsync(MemberUser, "Admin");
                 var resp = await SendConfirmRegistrationMail(MemberUser.Email);
 
@@ -100,7 +100,7 @@ namespace IririApi.Libs.Service
                 DOB = model.DOB,
                 Occupation = model.Occupation,
                // CardNo = model.CardNo,
-               // Status = model.Status,
+               Status = "Pending",
                 CreatedAt = DateTime.Now,
                 CreatedBy = model.MemberEmail,
                 IsPasswordChangeRequired = true,
@@ -110,16 +110,17 @@ namespace IririApi.Libs.Service
 
             try
             {
-                var result = await _userManager.CreateAsync(MemberUser, model.Password);
+                var pwd = RandomString(6);
+                var result = await _userManager.CreateAsync(MemberUser, pwd);
                // await _userManager.AddToRoleAsync(MemberUser, model.Role);
                 await _userManager.AddToRoleAsync(MemberUser, "Member");
-                var resp = await SendConfirmRegistrationMail(MemberUser.Email);
+                //var resp = await SendConfirmRegistrationMail(MemberUser.Email);
 
-                if (!resp)
-                {
+                //if (!resp)
+                //{
 
-                    throw new ObjectNotFoundException($"Couldn't Send Confirmation Email. Attempt to Login to resend confirmation link");
-                }
+                //    throw new ObjectNotFoundException($"Couldn't Send Confirmation Email. Attempt to Login to resend confirmation link");
+                //}
 
             }
             catch (Exception ex)
@@ -128,7 +129,13 @@ namespace IririApi.Libs.Service
             }
         }
 
-
+        public string RandomString(int length)
+        {
+            Random random = new Random();
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
         public MemberUserTracker ViewMembersByIdAsync(string userEmail)
         {
          

@@ -13,7 +13,9 @@ namespace IririApi.Libs.ViewModel
 
         public string FileTitle { get; set; }
 
-        public List<IFormFile> FileImage { get; set; }
+       public List<IFormFile> FileImage { get; set; }
+
+        public IList<string> base64 { get; set; }
 
         public string Description { get; set; }
 

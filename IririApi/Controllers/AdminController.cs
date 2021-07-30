@@ -54,6 +54,17 @@ namespace IririApi.Controllers
             return _adminService.GetPendingRegistrationsAsync();
         }
 
+
+        [HttpGet]
+        [Route("GetApprovedRegistrations")]
+        public List<MemberRegistrationUser> GetApprovedRegistrations()
+        {
+            return _adminService.GetActiveMemberAsync();
+        }
+
+
+
+
         [HttpDelete]
         [Route("DeleteMember")]
         public HttpResponseMessage DeleteEvent(string id)
@@ -62,7 +73,7 @@ namespace IririApi.Controllers
 
         }
 
-        [HttpPut]
+        [HttpGet]
         [Route("ApproveMember")]
         public Task<HttpResponseMessage> ApproveMember(string email)
         {

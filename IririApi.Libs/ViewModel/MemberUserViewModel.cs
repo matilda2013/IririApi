@@ -25,15 +25,15 @@ namespace IririApi.Libs.ViewModel
 
         public string MemberEmail { get; set; }
 
+        public string Plan { get; set; }
+
         public string MemberPhone { get; set; }
 
         public string Occupation { get; set; }
 
         public DateTime DOB { get; set; }
 
- 
-
-        public string Password { get; set; }
+       // public string Password { get; set; }
 
 
       

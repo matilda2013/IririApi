@@ -13,6 +13,8 @@ namespace IririApi.Libs.ViewModel
 
         public DateTime Date { get; set; }
 
+        public string EventBase64 { get; set; }
+        
         public string EventVenue { get; set; }
 
         public string EventDescription { get; set; }

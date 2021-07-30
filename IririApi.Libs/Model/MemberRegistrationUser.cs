@@ -12,7 +12,7 @@ namespace IririApi.Libs.Model
     public class MemberRegistrationUser : IdentityUser
     {
         
-       // public Guid MemberId { get; set; }
+       //public Guid MemberId { get; set; }
 
         [Column(TypeName = "nvarchar(130)")]
         public string FirstName { get; set; }
@@ -37,7 +37,7 @@ namespace IririApi.Libs.Model
         public string CardNo { get; set; }
 
         public string Plan { get; set; }
-        public decimal Amount { get; set; }
+        public double Amount { get; set; }
 
         public DateTime CreatedAt { get; set; }
 

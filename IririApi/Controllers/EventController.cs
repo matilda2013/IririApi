@@ -22,6 +22,7 @@ namespace IririApi.Controllers
         private readonly IEventService _eventService;
         private UserManager<MemberRegistrationUser> _userManager;
         private readonly IWebHostEnvironment webHostEnvironment;
+       // private readonly IHostingEnvironment webHostEnvironment;
         public EventController(IEventService eventService, UserManager<MemberRegistrationUser> userManager, IWebHostEnvironment hostEnvironment)
         {
             _eventService = eventService;
@@ -33,11 +34,11 @@ namespace IririApi.Controllers
 
         [HttpPost]
         [Route("AddNewEvent")]
-        public HttpResponseMessage AddNewEvent([FromForm] EventViewModel model)
+        public HttpResponseMessage AddNewEvent( EventViewModel model)
         {
             if (ModelState.IsValid)
             {
-                string myFileName = UploadedEventFile(model);
+                string myFileName = UploadedEventFile(model.EventBase64, model.EventTitle);
 
                 var result = new EventModel();
 
@@ -47,6 +48,7 @@ namespace IririApi.Controllers
                 result.EventPicture = myFileName;
                 result.EventVenue = model.EventVenue;
                 result.EventDescription = model.EventDescription;
+                result.EventBase64 = myFileName;
 
                return  _eventService.AddNewEventAsync(result);
             }
@@ -61,23 +63,14 @@ namespace IririApi.Controllers
 
   
 
-        private string UploadedEventFile(EventViewModel model)
+        private string UploadedEventFile(string base64, string title)
         {
-            string myFileName = null;
-
-
-            if (model.EventImage != null && model.EventImage.Count > 0)
-            {
-                foreach (IFormFile picture in model.EventImage) {
-                    string fileImageFolder = Path.Combine(webHostEnvironment.ContentRootPath, "Asset/images");
-                    myFileName = Guid.NewGuid().ToString() + "_" + picture.FileName;
-                    string myfilePath = Path.Combine(fileImageFolder, myFileName);
-                    using (var myfileStream = new FileStream(myfilePath, FileMode.Create))
-                    {
-                        picture.CopyTo(myfileStream);
-                    }
-                }
-            }
+            string myFileName = title + "_" + Guid.NewGuid().ToString()+".jpg";
+            byte[] imageBytes = Convert.FromBase64String(base64);
+             string filepath = Path.Combine($"{webHostEnvironment.WebRootPath}/Asset/images", $"{myFileName}");
+          
+            System.IO.File.WriteAllBytes(filepath, imageBytes);
+      
 
             return myFileName;
         }
@@ -112,12 +105,12 @@ namespace IririApi.Controllers
             return _eventService.ViewAllPendingEventsAsync();
         }
 
-        [HttpPut]
+        [HttpGet]
         [Route("ApproveEvent")]
         
-        public HttpResponseMessage ApproveEvent(ApproveEventViewModel model)
+        public HttpResponseMessage ApproveEvent(Guid  Id)
         {
-            return _eventService.ApproveEventAsync(model.EventId, model.status);
+            return _eventService.ApproveEventAsync(Id, true);
          
         }
 
@@ -199,11 +192,17 @@ namespace IririApi.Controllers
 
         [HttpPost]
         [Route("UploadImageToGallery")]
-        public HttpResponseMessage UploadImageToGallery([FromForm] GalleryViewModel model)
+        public HttpResponseMessage UploadImageToGallery(GalleryViewModel model)
         {
+           
             if (ModelState.IsValid)
             {
-                string myFileName = UploadedFile(model);
+                string myFileName = "";
+                foreach (var item in model.base64)
+                {
+                    myFileName =  UploadedGalleryFile(item, model.Event);
+                }
+               
 
                 Gallery gallery = new Gallery
                 {
@@ -248,8 +247,8 @@ namespace IririApi.Controllers
         {
             try
             {
-
-                string filepath = Path.Combine($"{webHostEnvironment.ContentRootPath}/Asset/images", $"{fileName}");
+              //  string filepath = Path.Combine($"{webHostEnvironment.WebRootPath}/Asset/images", $"{myFileName}");//Path.Combine(_hostingEnvironment.WebRootPath, "/uploads/images\\" + id + ".jpg");
+                string filepath = Path.Combine($"{webHostEnvironment.WebRootPath}/Asset/images", $"{fileName}");
 
                 var fileBytes = System.IO.File.ReadAllBytes(filepath);
                 var fileMemStream =
@@ -287,7 +286,19 @@ namespace IririApi.Controllers
             return _eventService.ViewGalleryAsync();
         }
 
+        private string UploadedGalleryFile( string base64, string title)
+        {
+           // count = 1;
+            //count++;
+            string myFileName = title + ".jpg";
+            byte[] imageBytes = Convert.FromBase64String(base64);
+            string filepath = Path.Combine($"{webHostEnvironment.WebRootPath}/Asset/images", $"{myFileName}");
 
+            System.IO.File.WriteAllBytes(filepath, imageBytes);
+
+
+            return myFileName;
+        }
 
     }
 }

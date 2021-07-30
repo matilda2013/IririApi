@@ -14,10 +14,11 @@ namespace IririApi.Libs.Model
         public Guid EventId { get; set; }
 
         public string EventTitle{ get; set; }
-
+        public string EventBase64 { get; set; }
         public DateTime Date { get; set; }
 
         public string EventVenue { get; set; }
+
 
         public string EventDescription { get; set; }
 

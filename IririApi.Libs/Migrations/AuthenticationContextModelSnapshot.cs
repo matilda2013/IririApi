@@ -104,6 +104,9 @@ namespace IririApi.Libs.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("EventBase64")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("EventDescription")
                         .HasColumnType("nvarchar(max)");
 
@@ -253,8 +256,8 @@ namespace IririApi.Libs.Migrations
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("amount")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("amount")
+                        .HasColumnType("float");
 
                     b.Property<DateTime>("created_at")
                         .HasColumnType("datetime2");
@@ -578,8 +581,8 @@ namespace IririApi.Libs.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("Amount")
+                        .HasColumnType("float");
 
                     b.Property<string>("CardNo")
                         .HasColumnType("nvarchar(max)");

@@ -17,7 +17,8 @@ namespace IririApi.Libs.Model.IService
 
 
         List<MemberRegistrationUser> GetPendingRegistrationsAsync();
-     
+        //GetActiveMemberAsync
+        List<MemberRegistrationUser> GetActiveMemberAsync();
         public Task<HttpResponseMessage> ApproveMemberAsync(string email);
         public Task<HttpResponseMessage> ActivateMemberAsync(string email);
         Task<bool> SendMail(string email, string subject, string body);

@@ -50,7 +50,7 @@ namespace IririApi.Controllers
             try
             {
 
-                decimal amount = model.amount;
+                double amount = model.amount;
 
 
                 string userId = User.Claims.First(c => c.Type == "UserID").Value;
