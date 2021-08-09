@@ -4,6 +4,7 @@ using IririApi.Libs.DTOs;
 using IririApi.Libs.Helpers;
 using IririApi.Libs.Inteface.IService;
 using IririApi.Libs.Model;
+using IririApi.Libs.Model.IService;
 using IririApi.Libs.ViewModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -23,19 +24,22 @@ namespace IririApi.Controllers
       [ApiController]
     public class MemberDuePaymentController : Controller
     {
-       
+        private readonly IAdminService _adminService;
+
         private readonly IPaymentMemberDuesService _paymentService;
+
         Logger logger = LogManager.GetLogger("PayStackLogger");
         private UserManager<MemberRegistrationUser> _userManager;
 
 
 
 
-        public MemberDuePaymentController(UserManager<MemberRegistrationUser> userManager, IPaymentMemberDuesService paymentService)
+        public MemberDuePaymentController(UserManager<MemberRegistrationUser> userManager, IPaymentMemberDuesService paymentService, IAdminService adminService)
         {
                    this._userManager = userManager;
 
                     _paymentService = paymentService;
+            _adminService = adminService;
 
         }
 
@@ -47,58 +51,62 @@ namespace IririApi.Controllers
         public async Task<ActionResult> PayStackGateway(MembershipPlanViewModel model)
         {
 
+
+
+
             try
             {
 
                 double amount = model.amount;
 
 
-                string userId = User.Claims.First(c => c.Type == "UserID").Value;
-                var Username = await _userManager.FindByIdAsync(userId);
+                //string userId = User.Claims.First(c => c.Type == "UserID").Value;
+                var Username = await _userManager.FindByEmailAsync(model.emailAddress);
             
                 var email = model.emailAddress;
                 var phoneNumber = Username.PhoneNumber;
                 var custName =  Username.FirstName + " " + Username.LastName;
                 var MemberId = Username.Id;
+                _paymentService.AddPayment(model, email, custName, phoneNumber, MemberId);
+               await _adminService.ActivateMemberAsync(email);
 
+                //var callback = "https://localhost:44312/api/Payment/VerifyPaystackPayment"; 
 
-                var callback = "https://localhost:44312/api/Payment/VerifyPaystackPayment"; 
+                ////PAYSTACK AMOUNT IS IN KOBO
+                //var requestObj = new { amount = (amount * 100).ToString(), email, callback };
 
-                //PAYSTACK AMOUNT IS IN KOBO
-                var requestObj = new { amount = (amount * 100).ToString(), email, callback };
-
-                logger.Info("");
-                logger.Info("------------------------------");
-                logger.Info("initializing paystack transaction for - " + email + " , amount - " + amount);
-
-
-
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11
-                                                | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
+                //logger.Info("");
+                //logger.Info("------------------------------");
+                //logger.Info("initializing paystack transaction for - " + email + " , amount - " + amount);
 
 
 
-
-                var result = await ApiHelper.paystackUrl
-                    .AppendPathSegment("transaction/initialize")
-                    .WithOAuthBearerToken(ApiHelper.PaystackSecretKey)
-                    .PostJsonAsync(requestObj)
-                    .ReceiveJson<InitializeTransaction.InitializeTransactionResponseModel>();
+                //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11
+                //                                | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
 
 
 
-                if (result.status)
-                {
-                    logger.Info("paystack initialisation was successful");
 
-                    _paymentService.AddPayment(model, email, custName, phoneNumber, MemberId);
+                //var result = await ApiHelper.paystackUrl
+                //    .AppendPathSegment("transaction/initialize")
+                //    .WithOAuthBearerToken(ApiHelper.PaystackSecretKey)
+                //    .PostJsonAsync(requestObj)
+                //    .ReceiveJson<InitializeTransaction.InitializeTransactionResponseModel>();
 
-                    logger.Info("Callback Url - " + callback);
-                    logger.Info("now redirecting to paystack site - " + result.data.authorization_url);
 
-                    return Ok(new { url = result.data.authorization_url });
 
-                }
+                //if (result.status)
+                //{
+                //    logger.Info("paystack initialisation was successful");
+
+                //    _paymentService.AddPayment(model, email, custName, phoneNumber, MemberId);
+
+                //    logger.Info("Callback Url - " + callback);
+                //    logger.Info("now redirecting to paystack site - " + result.data.authorization_url);
+
+                //    return Ok(new { url = result.data.authorization_url });
+
+                //}
 
                 return RedirectToAction("");
 

@@ -144,12 +144,15 @@ namespace IririApi.Libs.Service
         {
             try
             {
-               
+                      
 
-                var emailCredEmail = "membership@iriridc.com";
+                var emailCredEmail = "no-reply@epayplusng.com";
+                var password = "UGFzc3dvcmQx";
 
+                var passwordenc = System.Convert.FromBase64String(password);
+                var passResult = System.Text.Encoding.UTF8.GetString(passwordenc);
 
-                var mailFrom = new MailAddress(emailCredEmail, "IririDC");
+                var mailFrom = new MailAddress(emailCredEmail, "EpayplusNg");
                 var mailTo = new MailAddress(email);
 
                 MailMessage mailMsg = new MailMessage(mailFrom, mailTo);
@@ -158,14 +161,35 @@ namespace IririApi.Libs.Service
                 mailMsg.Body = body;
 
                 mailMsg.IsBodyHtml = true;
-                var SmtpHost = "mail.iriridc.com";//"smtp.1and1.com";
-                int SmtpPort = 8889;// 587;
+                var SmtpHost = "smtp.1and1.com";//"smtp.1and1.com";
+                int SmtpPort = 587;// 587;
                 SmtpClient smtp = new SmtpClient(SmtpHost, SmtpPort);
-                smtp.Credentials = new NetworkCredential(emailCredEmail, "Password1@");
+                smtp.Credentials = new NetworkCredential(emailCredEmail, passResult);
                 smtp.EnableSsl = true;
                 await smtp.SendMailAsync(mailMsg);
 
-          
+                //here
+
+                //var emailCredEmail = "no-reply@epayplusng.com";
+
+                //var password = "UGFzc3dvcmQx";
+
+                //var passwordenc = System.Convert.FromBase64String(password);
+                //var passResult = System.Text.Encoding.UTF8.GetString(passwordenc);
+
+                //var mailFrom = new MailAddress(emailCredEmail, "EpayplusNg");
+                //var mailTo = new MailAddress(email);
+
+                //MailMessage mailMsg = new MailMessage(mailFrom, mailTo);
+                //mailMsg.Subject = subject;
+
+                //mailMsg.Body = body;
+
+                //mailMsg.IsBodyHtml = true;
+                //var SmtpHost = "smtp.1and1.com";
+                //int SmtpPort = 587;
+                //SmtpClient smtp = new SmtpClient(SmtpHost, SmtpPort);
+                //smtp.Credentials = new NetworkCredential(emailCredEmail, passResult);
                 return true;
             }
             catch (Exception ex)
@@ -194,7 +218,7 @@ namespace IririApi.Libs.Service
 
             //Send Mail Containing Plan and Amount
             string body = "Dear " + name + ", your registration request has been approved. Kindly complete your registration by paying the sum of " + amount + " for " + plan + " subscription plan with the link below \n \n";
-            body = body + "https://iriridc.com/subpay?email=" + email + "&plan=" + plan + "&amount=" + amount + "&name=" + name;
+            body = body + "https://localhost:44313/Paystack?email=" + email; //+ "&plan=" + plan + "&amount=" + amount + "&name=" + name;
 
             await SendMail(email, "Payment Approval", body);
             return response;
@@ -246,6 +270,100 @@ namespace IririApi.Libs.Service
 
 
         }
+        public async Task<bool> SendMail2(string email, string subject, string body)
+        {
+            try
+            {
+
+
+                MailMessage mail = new MailMessage();
+
+                //set the addresses 
+                mail.From = new MailAddress("testEmail@iriridc.com"); //IMPORTANT: This must be same as your smtp authentication address.
+                mail.To.Add(email);
+
+                //set the content 
+                mail.Subject = subject;
+                mail.Body = body;
+                //send the message 
+                SmtpClient smtp = new SmtpClient("testEmail@iriridc.com");
+
+                //IMPORANT:  Your smtp login email MUST be same as your FROM address. 
+                NetworkCredential Credentials = new NetworkCredential("testEmail@iriridc.com", "password1@");
+                smtp.UseDefaultCredentials = false;
+                smtp.Credentials = Credentials;
+                smtp.Port = 25;    //alternative port number is 8889
+                smtp.EnableSsl = false;
+                smtp.Send(mail);
+                //here
+
+                //var emailCredEmail = "no-reply@epayplusng.com";
+
+                //var password = "UGFzc3dvcmQx";
+
+                //var passwordenc = System.Convert.FromBase64String(password);
+                //var passResult = System.Text.Encoding.UTF8.GetString(passwordenc);
+
+                //var mailFrom = new MailAddress(emailCredEmail, "EpayplusNg");
+                //var mailTo = new MailAddress(email);
+
+                //MailMessage mailMsg = new MailMessage(mailFrom, mailTo);
+                //mailMsg.Subject = subject;
+
+                //mailMsg.Body = body;
+
+                //mailMsg.IsBodyHtml = true;
+                //var SmtpHost = "smtp.1and1.com";
+                //int SmtpPort = 587;
+                //SmtpClient smtp = new SmtpClient(SmtpHost, SmtpPort);
+                //smtp.Credentials = new NetworkCredential(emailCredEmail, passResult);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                var rrr = ex.InnerException + " " + ex.Message;
+                throw ex;
+            }
+
+        }
+
+
+
+        //protected void Page_Load(object sender, EventArgs e)
+        //{
+        //    //create the mail message 
+        //    MailMessage mail = new MailMessage();
+
+        //    //set the addresses 
+        //    mail.From = new MailAddress("postmaster@yourdomain.com"); //IMPORTANT: This must be same as your smtp authentication address.
+        //    mail.To.Add("postmaster@yourdomain.com");
+
+        //    //set the content 
+        //    mail.Subject = "This is an email";
+        //    mail.Body = "This is from system.net.mail using C sharp with smtp authentication.";
+        //    //send the message 
+        //    SmtpClient smtp = new SmtpClient("mail.yourdomain.com");
+
+        //    //IMPORANT:  Your smtp login email MUST be same as your FROM address. 
+        //    NetworkCredential Credentials = new NetworkCredential("postmaster@yourdomain.com", "password");
+        //    smtp.UseDefaultCredentials = false;
+        //    smtp.Credentials = Credentials;
+        //    smtp.Port = 25;    //alternative port number is 8889
+        //    smtp.EnableSsl = false;
+        //    smtp.Send(mail);
+        //   // lblMessage.Text = "Mail Sent";
+        //}
+
+
+
+
+
+
+
+
+
+
+
 
         public async Task<HttpResponseMessage> ActivateMemberAsync(string email)
         {
@@ -264,8 +382,9 @@ namespace IririApi.Libs.Service
                var result = await _userManager.UpdateAsync(MemberUser);
                 await _userManager.AddToRoleAsync(MemberUser, "Member");
                 // await _userManager.AddToRoleAsync(MemberUser, "Member");
-
-                var resp = await SendConfirmRegistrationMail(MemberUser.Email);
+                string body = "Kindly login with your registered email and your password is  " + randpass ;
+                body = body + "https://localhost:44313/Paystack?email=" + email; //+ "&plan=" + plan + "&amount=" + amount + "&name=" + name;
+                var resp = await SendMail2(email, "Login Credentials", body); //SendConfirmRegistrationMail(MemberUser.Email);
 
                 if (!resp)
                 {

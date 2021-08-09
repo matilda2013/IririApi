@@ -22,12 +22,14 @@ namespace IririApi.Controllers
         private readonly IEventService _eventService;
         private UserManager<MemberRegistrationUser> _userManager;
         private readonly IWebHostEnvironment webHostEnvironment;
-       // private readonly IHostingEnvironment webHostEnvironment;
-        public EventController(IEventService eventService, UserManager<MemberRegistrationUser> userManager, IWebHostEnvironment hostEnvironment)
+        private readonly AuthenticationContext _DbContext;
+        // private readonly IHostingEnvironment webHostEnvironment;
+        public EventController(IEventService eventService, UserManager<MemberRegistrationUser> userManager, IWebHostEnvironment hostEnvironment,  AuthenticationContext DbContext)
         {
             _eventService = eventService;
             webHostEnvironment = hostEnvironment;
             _userManager = userManager;
+            _DbContext = DbContext;
         }
 
 
@@ -200,7 +202,7 @@ namespace IririApi.Controllers
                 string myFileName = "";
                 foreach (var item in model.base64)
                 {
-                    myFileName =  UploadedGalleryFile(item, model.Event);
+                    myFileName =  UploadedGalleryFile(item, model.Event, model.Event);
                 }
                
 
@@ -286,18 +288,26 @@ namespace IririApi.Controllers
             return _eventService.ViewGalleryAsync();
         }
 
-        private string UploadedGalleryFile( string base64, string title)
+        private string UploadedGalleryFile( string base64, string title, string Event)
         {
-           // count = 1;
-            //count++;
-            string myFileName = title + ".jpg";
+          
+            string myFileName =  Guid.NewGuid().ToString()+ "_" +  title + ".jpg";
             byte[] imageBytes = Convert.FromBase64String(base64);
             string filepath = Path.Combine($"{webHostEnvironment.WebRootPath}/Asset/images", $"{myFileName}");
 
             System.IO.File.WriteAllBytes(filepath, imageBytes);
+                                  
 
+            EventGallery eventGallery = new EventGallery();
+
+            eventGallery.FileName = myFileName;
+            eventGallery.galleryName = Event;
+            _DbContext.EventGalleries.Add(eventGallery);
+            _DbContext.SaveChanges();
 
             return myFileName;
+
+
         }
 
     }

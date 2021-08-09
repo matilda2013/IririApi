@@ -78,7 +78,64 @@ namespace IririApi.Libs.Service
                 throw ex;
             }
         }
+        public async Task<bool> SendMail2(string email, string subject, string body)
+        {
+            try
+            {
 
+
+                var emailCredEmail = "no-reply@epayplusng.com";
+                var password = "UGFzc3dvcmQx";
+
+                var passwordenc = System.Convert.FromBase64String(password);
+                var passResult = System.Text.Encoding.UTF8.GetString(passwordenc);
+
+                var mailFrom = new MailAddress(emailCredEmail, "EpayplusNg");
+                var mailTo = new MailAddress(email);
+
+                MailMessage mailMsg = new MailMessage(mailFrom, mailTo);
+                mailMsg.Subject = subject;
+
+                mailMsg.Body = body;
+
+                mailMsg.IsBodyHtml = true;
+                var SmtpHost = "smtp.1and1.com";//"smtp.1and1.com";
+                int SmtpPort = 587;// 587;
+                SmtpClient smtp = new SmtpClient(SmtpHost, SmtpPort);
+                smtp.Credentials = new NetworkCredential(emailCredEmail, passResult);
+                smtp.EnableSsl = true;
+                await smtp.SendMailAsync(mailMsg);
+
+                //here
+
+                //var emailCredEmail = "no-reply@epayplusng.com";
+
+                //var password = "UGFzc3dvcmQx";
+
+                //var passwordenc = System.Convert.FromBase64String(password);
+                //var passResult = System.Text.Encoding.UTF8.GetString(passwordenc);
+
+                //var mailFrom = new MailAddress(emailCredEmail, "EpayplusNg");
+                //var mailTo = new MailAddress(email);
+
+                //MailMessage mailMsg = new MailMessage(mailFrom, mailTo);
+                //mailMsg.Subject = subject;
+
+                //mailMsg.Body = body;
+
+                //mailMsg.IsBodyHtml = true;
+                //var SmtpHost = "smtp.1and1.com";
+                //int SmtpPort = 587;
+                //SmtpClient smtp = new SmtpClient(SmtpHost, SmtpPort);
+                //smtp.Credentials = new NetworkCredential(emailCredEmail, passResult);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
 
 
         public async Task RegisterMemberUserAsync(MemberUserViewModel model)
@@ -110,17 +167,18 @@ namespace IririApi.Libs.Service
 
             try
             {
-                var pwd = RandomString(6);
-                var result = await _userManager.CreateAsync(MemberUser, pwd);
+              //  var pwd = RandomString(6);
+                var result = await _userManager.CreateAsync(MemberUser);
                // await _userManager.AddToRoleAsync(MemberUser, model.Role);
                 await _userManager.AddToRoleAsync(MemberUser, "Member");
-                //var resp = await SendConfirmRegistrationMail(MemberUser.Email);
+                var body = "Thank you for joining IRIRI DC you will get a link soon once your membership has been approved";
+                var resp = await SendMail2(MemberUser.Email, "IRIRI DC", body); //SendConfirmRegistrationMail(MemberUser.Email);
 
-                //if (!resp)
-                //{
+                if (!resp)
+                {
 
-                //    throw new ObjectNotFoundException($"Couldn't Send Confirmation Email. Attempt to Login to resend confirmation link");
-                //}
+                    throw new ObjectNotFoundException($"Couldn't Send Confirmation Email. Attempt to Login to resend confirmation link");
+                }
 
             }
             catch (Exception ex)
@@ -288,6 +346,7 @@ namespace IririApi.Libs.Service
         {
             try
             {
+
                 var emailId = InsertEmailLog(body, email, subject);
 
                 var emailCredEmail = "no-reply@epayplusng.com";
@@ -318,6 +377,38 @@ namespace IririApi.Libs.Service
                     UpdateEmailLog(emailId);
 
                 }).Start();
+
+
+                //var emailId = InsertEmailLog(body, email, subject);
+
+                //var emailCredEmail = "no-reply@epayplusng.com";
+
+                //var password = "UGFzc3dvcmQx";
+
+                //var passwordenc = System.Convert.FromBase64String(password);
+                //var passResult = System.Text.Encoding.UTF8.GetString(passwordenc);
+
+                //var mailFrom = new MailAddress(emailCredEmail, "EpayplusNg");
+                //var mailTo = new MailAddress(email);
+
+                //MailMessage mailMsg = new MailMessage(mailFrom, mailTo);
+                //mailMsg.Subject = subject;
+
+                //mailMsg.Body = body;
+
+                //mailMsg.IsBodyHtml = true;
+                //var SmtpHost = "smtp.1and1.com";
+                //int SmtpPort = 587;
+                //SmtpClient smtp = new SmtpClient(SmtpHost, SmtpPort);
+                //smtp.Credentials = new NetworkCredential(emailCredEmail, passResult);
+                //smtp.EnableSsl = true;
+                //await smtp.SendMailAsync(mailMsg);
+
+                //new Task(() =>
+                //{
+                //    UpdateEmailLog(emailId);
+
+                //}).Start();
 
 
                 return true;
