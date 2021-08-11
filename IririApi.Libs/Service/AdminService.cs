@@ -7,6 +7,8 @@ using IririApi.Libs.Model.IRepository;
 using IririApi.Libs.Model.IService;
 using IririApi.Libs.ViewModel;
 using Microsoft.AspNetCore.Identity;
+using RestSharp;
+using RestSharp.Authenticators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -198,7 +200,32 @@ namespace IririApi.Libs.Service
             }
 
         }
+        public static RestResponse SendApproveMessage(string body, string email)
+        {
+            try
+            {
+                RestClient client = new RestClient();
+                client.BaseUrl = new Uri("https://api.mailgun.net/v3");
+                client.Authenticator =
+                new HttpBasicAuthenticator("api",
+                                           "2c84679dac289ea0d22ce189d099dbbe-9ad3eb61-74216226");
+                RestRequest request = new RestRequest();
+                request.AddParameter("domain", "sandboxb7bb3965926840a6a0211c8e060778a4.mailgun.org", ParameterType.UrlSegment);
+                request.Resource = "{domain}/messages";
+                request.AddParameter("from", "Iriri <testEmail@iriridc.com>");
+                request.AddParameter("to", email);
+                request.AddParameter("subject", "PAYMENT APPROVAL");
+                request.AddParameter("text", body);
+                request.Method = Method.POST;
+                return (RestResponse)client.Execute(request);
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message + " " + ex.InnerException;
+                throw ex;
+            }
 
+        }
         public async Task<HttpResponseMessage> ApproveMemberAsync(string email)
         {
             //var member = _adminrepository.GetById(email);
@@ -220,7 +247,7 @@ namespace IririApi.Libs.Service
             string body = "Dear " + name + ", your registration request has been approved. Kindly complete your registration by paying the sum of " + amount + " for " + plan + " subscription plan with the link below \n \n";
             body = body + "https://localhost:44313/Paystack?email=" + email; //+ "&plan=" + plan + "&amount=" + amount + "&name=" + name;
 
-            await SendMail(email, "Payment Approval", body);
+             SendApproveMessage(email,  body);
             return response;
 
         }
@@ -274,7 +301,7 @@ namespace IririApi.Libs.Service
         {
             try
             {
-
+                //SendSimpleMessage();
 
                 MailMessage mail = new MailMessage();
 
@@ -286,13 +313,14 @@ namespace IririApi.Libs.Service
                 mail.Subject = subject;
                 mail.Body = body;
                 //send the message 
-                SmtpClient smtp = new SmtpClient("testEmail@iriridc.com");
+                SmtpClient smtp = new SmtpClient("mail.iriridc.com");
+                
 
                 //IMPORANT:  Your smtp login email MUST be same as your FROM address. 
                 NetworkCredential Credentials = new NetworkCredential("testEmail@iriridc.com", "password1@");
                 smtp.UseDefaultCredentials = false;
                 smtp.Credentials = Credentials;
-                smtp.Port = 25;    //alternative port number is 8889
+                smtp.Port = 8889;    //alternative port number is 8889
                 smtp.EnableSsl = false;
                 smtp.Send(mail);
                 //here
@@ -321,7 +349,9 @@ namespace IririApi.Libs.Service
             }
             catch (Exception ex)
             {
-                var rrr = ex.InnerException + " " + ex.Message;
+                SmtpException exw =  new SmtpException();
+                var rrr = exw.InnerException + exw.Message;
+               // var rrr = ex.InnerException + " " + ex.Message;
                 throw ex;
             }
 
@@ -369,12 +399,27 @@ namespace IririApi.Libs.Service
         {
             dynamic MemberUser = await _userManager.FindByNameAsync(email);
             MemberUser.Status = "Active";
-            await _userManager.UpdateAsync(MemberUser);
+            
+       
 
 
             dynamic password = new Guid().ToString().Substring(1, 6);
-           dynamic randpass = password;
-            MemberUser.randPassword = randpass;
+            dynamic oldpass = "Password1";
+            dynamic randpass = "password23";
+
+       
+
+            //if(MemberUser.PasswordHash == null)
+            //{
+            //    MemberUser.PasswordHash = randpass;
+            //}
+            await _userManager.ChangePasswordAsync(MemberUser,oldpass,randpass);
+            await _userManager.UpdateAsync(MemberUser);
+           
+
+
+
+
             //Save Credentials on Identity
             try
             {
@@ -382,15 +427,17 @@ namespace IririApi.Libs.Service
                var result = await _userManager.UpdateAsync(MemberUser);
                 await _userManager.AddToRoleAsync(MemberUser, "Member");
                 // await _userManager.AddToRoleAsync(MemberUser, "Member");
-                string body = "Kindly login with your registered email and your password is  " + randpass ;
-                body = body + "https://localhost:44313/Paystack?email=" + email; //+ "&plan=" + plan + "&amount=" + amount + "&name=" + name;
-                var resp = await SendMail2(email, "Login Credentials", body); //SendConfirmRegistrationMail(MemberUser.Email);
+                string body = ($" Dear {email}, Kindly login with your email and this password {randpass}");// Dear Your Kindly login with your registered email and your password is  " + randpass ;
+              //  body = body + "https://localhost:44313/Paystack?email=" + email; //+ "&plan=" + plan + "&amount=" + amount + "&name=" + name;
 
-                if (!resp)
-                {
+                SendSimpleMessage(body,email);
+                //var resp = await SendMail2(email, "Login Credentials", body); //SendConfirmRegistrationMail(MemberUser.Email);
 
-                    throw new ObjectNotFoundException($"Couldn't Send Confirmation Email. Attempt to Login to resend confirmation link");
-                }
+                //if (!resp)
+                //{
+
+                //    throw new ObjectNotFoundException($"Couldn't Send Confirmation Email. Attempt to Login to resend confirmation link");
+                //}
 
             }
             catch (Exception ex)
@@ -404,7 +451,32 @@ namespace IririApi.Libs.Service
             return response;
         }
 
-
+        public static RestResponse SendSimpleMessage(string body, string email)
+        {
+            try
+            {
+                RestClient client = new RestClient();
+                client.BaseUrl = new Uri("https://api.mailgun.net/v3");
+                client.Authenticator =
+                new HttpBasicAuthenticator("api",
+                                           "2c84679dac289ea0d22ce189d099dbbe-9ad3eb61-74216226");
+                RestRequest request = new RestRequest();
+                request.AddParameter("domain", "sandboxb7bb3965926840a6a0211c8e060778a4.mailgun.org", ParameterType.UrlSegment);
+                request.Resource = "{domain}/messages";
+                request.AddParameter("from", "Iriri <testEmail@iriridc.com>");
+                request.AddParameter("to", email);
+                request.AddParameter("subject", "LOGIN CREDENTIAL");
+                request.AddParameter("text", body);
+                request.Method = Method.POST;
+                return (RestResponse)client.Execute(request);
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message + " " + ex.InnerException;
+                throw ex;
+            }
+           
+        }
 
     }
 }
