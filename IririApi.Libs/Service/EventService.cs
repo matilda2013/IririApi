@@ -36,6 +36,7 @@ namespace IririApi.Libs.Service
 
         public HttpResponseMessage AddNewEventAsync(EventModel model)
         {
+            model.isTeaser = false;
             _DbContext.EventModels.Add(model);
             _DbContext.SaveChanges();
             var response = new HttpResponseMessage();

@@ -47,7 +47,7 @@ namespace IririApi.Libs.Service
 
                 _DbContext.MembershipPlanPayments.Add(result);
                 _DbContext.SaveChanges();
-
+                //send email to the user that his payment has been approved
 
             }
             catch (Exception ex)

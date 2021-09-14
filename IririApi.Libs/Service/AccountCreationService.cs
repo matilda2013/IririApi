@@ -8,6 +8,8 @@ using IririApi.Libs.Model.IService;
 using IririApi.Libs.ViewModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using RestSharp;
+using RestSharp.Authenticators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,6 +80,35 @@ namespace IririApi.Libs.Service
                 throw ex;
             }
         }
+
+        public static RestResponse WelcomeMessage(string body, string email)
+        {
+            try
+            {
+               	RestClient client = new RestClient ();
+		client.BaseUrl = new Uri ("https://api.mailgun.net/v3");
+		client.Authenticator =
+			new HttpBasicAuthenticator ("api",
+                "b8c4e06366fc8030b254a8626bd82b21-156db0f1-d5a8a74c");
+		RestRequest request = new RestRequest ();
+                //request.AddParameter ("domain", "sandbox2b85528391224c619ffa6313a71be78c.mailgun.org", ParameterType.UrlSegment);
+                request.AddParameter("domain", "sandboxdead0486080e44c09637d100118a0a5f.mailgun.org", ParameterType.UrlSegment);
+                request.Resource = "{domain}/messages";
+                request.AddParameter("from", "Mailgun Sandbox <postmaster@sandboxdead0486080e44c09637d100118a0a5f.mailgun.org>");
+                request.AddParameter ("to", email);
+		request.AddParameter ("subject", "Hello");
+		request.AddParameter ("text", body);
+		request.Method = Method.POST;
+                var rr = client.Execute(request);
+                return (RestResponse)client.Execute(request);
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message + " " + ex.InnerException;
+                throw ex;
+            }
+
+        }
         public async Task<bool> SendMail2(string email, string subject, string body)
         {
             try
@@ -136,7 +167,13 @@ namespace IririApi.Libs.Service
             }
 
         }
-
+        public string GeneratePassword()
+        {
+            Random r = new Random();
+            var x = r.Next(0, 1000000);
+            var randomNumber = x.ToString("000000");
+            return randomNumber;
+        }
 
         public async Task RegisterMemberUserAsync(MemberUserViewModel model)
         {
@@ -172,13 +209,14 @@ namespace IririApi.Libs.Service
                // await _userManager.AddToRoleAsync(MemberUser, model.Role);
                 await _userManager.AddToRoleAsync(MemberUser, "Member");
                 var body = "Thank you for joining IRIRI DC you will get a link soon once your membership has been approved";
-                var resp = await SendMail2(MemberUser.Email, "IRIRI DC", body); //SendConfirmRegistrationMail(MemberUser.Email);
+                WelcomeMessage(body, MemberUser.Email);
+                //var resp = await SendMail2(MemberUser.Email, "IRIRI DC", body); //SendConfirmRegistrationMail(MemberUser.Email);
 
-                if (!resp)
-                {
+                //if (!resp)
+                //{
 
-                    throw new ObjectNotFoundException($"Couldn't Send Confirmation Email. Attempt to Login to resend confirmation link");
-                }
+                //    throw new ObjectNotFoundException($"Couldn't Send Confirmation Email. Attempt to Login to resend confirmation link");
+                //}
 
             }
             catch (Exception ex)

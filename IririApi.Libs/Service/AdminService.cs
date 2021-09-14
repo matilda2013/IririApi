@@ -6,11 +6,14 @@ using IririApi.Libs.Model;
 using IririApi.Libs.Model.IRepository;
 using IririApi.Libs.Model.IService;
 using IririApi.Libs.ViewModel;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using MimeKit;
 using RestSharp;
 using RestSharp.Authenticators;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -29,12 +32,14 @@ namespace IririApi.Libs.Service
         private readonly IRepository<MemberRegistrationUser> _adminrepository;
         private UserManager<MemberRegistrationUser> _userManager;
         string url1 = "https://localhost:44312";
+        private IHostingEnvironment _env;
 
-        public AdminService(AuthenticationContext DbContext, UserManager<MemberRegistrationUser> userManager)
+        public AdminService(AuthenticationContext DbContext, UserManager<MemberRegistrationUser> userManager, IHostingEnvironment env)
         {
             _userManager = userManager;
             _DbContext = DbContext;
             _adminrepository = new Repository<MemberRegistrationUser>(DbContext);
+            _env = env;
         }
 
       
@@ -208,9 +213,9 @@ namespace IririApi.Libs.Service
                 client.BaseUrl = new Uri("https://api.mailgun.net/v3");
                 client.Authenticator =
                 new HttpBasicAuthenticator("api",
-                                           "2c84679dac289ea0d22ce189d099dbbe-9ad3eb61-74216226");
+                                           "ebc621b4d61b466ba6af2ec24cc96b93-9ad3eb61-7e11e71f");
                 RestRequest request = new RestRequest();
-                request.AddParameter("domain", "sandboxb7bb3965926840a6a0211c8e060778a4.mailgun.org", ParameterType.UrlSegment);
+                request.AddParameter("domain", "sandbox2b85528391224c619ffa6313a71be78c.mailgun.org", ParameterType.UrlSegment);
                 request.Resource = "{domain}/messages";
                 request.AddParameter("from", "Iriri <testEmail@iriridc.com>");
                 request.AddParameter("to", email);
@@ -387,7 +392,13 @@ namespace IririApi.Libs.Service
 
 
 
-
+        public string GeneratePassword()
+        {
+            Random r = new Random();
+            var x = r.Next(0, 1000000);
+            var randomNumber = x.ToString("000000");
+            return randomNumber;
+        }
 
 
 
@@ -403,9 +414,9 @@ namespace IririApi.Libs.Service
        
 
 
-            dynamic password = new Guid().ToString().Substring(1, 6);
+            
             dynamic oldpass = "Password1";
-            dynamic randpass = "password23";
+            dynamic randpass = GeneratePassword();
 
        
 
@@ -414,6 +425,7 @@ namespace IririApi.Libs.Service
             //    MemberUser.PasswordHash = randpass;
             //}
             await _userManager.ChangePasswordAsync(MemberUser,oldpass,randpass);
+            //var newPasswordHash = this.PasswordHasher.HashPassword(newPassword);
             await _userManager.UpdateAsync(MemberUser);
            
 
@@ -425,19 +437,44 @@ namespace IririApi.Libs.Service
             {
                // var result = await _userManager.CreateAsync(MemberUser, password);
                var result = await _userManager.UpdateAsync(MemberUser);
+
+                if (result.Succeeded)
+                {
+
+                }
                 await _userManager.AddToRoleAsync(MemberUser, "Member");
-                // await _userManager.AddToRoleAsync(MemberUser, "Member");
-                string body = ($" Dear {email}, Kindly login with your email and this password {randpass}");// Dear Your Kindly login with your registered email and your password is  " + randpass ;
-              //  body = body + "https://localhost:44313/Paystack?email=" + email; //+ "&plan=" + plan + "&amount=" + amount + "&name=" + name;
+                //send mail here
 
-                SendSimpleMessage(body,email);
-                //var resp = await SendMail2(email, "Login Credentials", body); //SendConfirmRegistrationMail(MemberUser.Email);
+                var pathToFile = _env.WebRootPath
+                           + Path.DirectorySeparatorChar.ToString()
+                           + "Template"
+                           + Path.DirectorySeparatorChar.ToString()
+                           + "EmailTemplate"
+                           + Path.DirectorySeparatorChar.ToString()
+                           + "Welcome_Email_Template.html";
 
-                //if (!resp)
-                //{
+                var builder = new BodyBuilder();
+                using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
+                {
+                    builder.HtmlBody = SourceReader.ReadToEnd();
+                }
+                var subject = "Confirm Account Registration";
+                string Message = ($" Dear {email}, Kindly login with your email and this password {randpass}");
 
-                //    throw new ObjectNotFoundException($"Couldn't Send Confirmation Email. Attempt to Login to resend confirmation link");
-                //}
+                string messageBody = string.Format(builder.HtmlBody,
+                            subject,
+                            String.Format("{0:dddd, d MMMM yyyy}", DateTime.Now),
+                            email,
+                           email,
+                            randpass,
+                            Message,
+                            Message
+                            );
+
+
+              
+              SendSimpleMessage(messageBody,email);
+              
 
             }
             catch (Exception ex)
@@ -451,24 +488,30 @@ namespace IririApi.Libs.Service
             return response;
         }
 
-        public static RestResponse SendSimpleMessage(string body, string email)
+        public void  SendSimpleMessage(string body, string email)
         {
             try
             {
-                RestClient client = new RestClient();
-                client.BaseUrl = new Uri("https://api.mailgun.net/v3");
-                client.Authenticator =
-                new HttpBasicAuthenticator("api",
-                                           "2c84679dac289ea0d22ce189d099dbbe-9ad3eb61-74216226");
-                RestRequest request = new RestRequest();
-                request.AddParameter("domain", "sandboxb7bb3965926840a6a0211c8e060778a4.mailgun.org", ParameterType.UrlSegment);
-                request.Resource = "{domain}/messages";
-                request.AddParameter("from", "Iriri <testEmail@iriridc.com>");
-                request.AddParameter("to", email);
-                request.AddParameter("subject", "LOGIN CREDENTIAL");
-                request.AddParameter("text", body);
-                request.Method = Method.POST;
-                return (RestResponse)client.Execute(request);
+                MailMessage mail = new MailMessage();
+
+                //set the addresses 
+                mail.From = new MailAddress("developer@iriridc.com"); //IMPORTANT: This must be same as your smtp authentication address.
+                mail.To.Add(email);
+
+                //set the content 
+                mail.Subject = "This is an email";
+                mail.Body = body;
+                mail.IsBodyHtml = true;
+                //send the message 
+                SmtpClient smtp = new SmtpClient("mail5015.site4now.net");
+
+                //IMPORANT:  Your smtp login email MUST be same as your FROM address. 
+                NetworkCredential Credentials = new NetworkCredential("developer@iriridc.com", "Password1@");
+                smtp.UseDefaultCredentials = false;
+                smtp.Credentials = Credentials;
+                smtp.Port = 25;    //alternative port number is 8889
+                smtp.EnableSsl = false;
+                smtp.Send(mail);
             }
             catch (Exception ex)
             {

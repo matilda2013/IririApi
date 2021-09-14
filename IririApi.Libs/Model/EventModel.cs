@@ -28,6 +28,8 @@ namespace IririApi.Libs.Model
 
         public bool status { get; set; }
 
+        public bool isTeaser { get; set; }
+
 
     }
 }
