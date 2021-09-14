@@ -1,0 +1,31 @@
+[Info]
+Description = License file for LEADTOOLS SDK
+Non Server License
+Evaluation License
+
+[Expiration]
+Expiry Date = 8/10/2020
+
+[Customer]
+FirstName = Abdullahi
+LastName = Uthman
+Company = Unknown
+Application = Unknown
+LEADContact = Unknown
+UserContact = abdulbenyusouf@gmail.com
+
+[Product]
+Version = 20.0
+PurchaseDate = Unknown
+Product1 = Unknown
+
+[SerialNumbers]
+SN = Unknown
+
+
+[Unlocks]
+L_SUPPORT_BASIC
+L_SUPPORT_APP_STORE
+
+[JSLicense]
+License = {"ver":"3.0","code":"Uk1BT5sIPMZzSgDoCzWp3lBN1ONZjfsVfYqIDek8D6OwjfAHPTlR0RlW7jje0tk9ICSfajxzqD651F+NWQoA6BlJOvgUZZGoKo19oARqGQHsKNR9BXmSBVM2786QVpe0JeuvmUVdhLXXqJG2kBZ0pvKuI/MLC1g+TYJjejgnamV0OwCfzZbF7b5hhWXeUa1gXK9SoCmEl+g3iv+7CKumLXeduZBAMSlypk/ei1z7BgS9mIb821/sBNYel+Zh0wY6aLSIpY2pe953t9EansWuAAjtmw2o26c8xIL3/ohARQGG12nCw5R12QWqRKGl5U6dWyGbZ/nX+p9YtFgUEKn/HBtX6tdmC+ntQZXHwwUDt8FdKzJruSqvneQHcizwWLAIcJc7UL7mjZvLiYNfOghK5ckdmH/hjqPfhG3kmkqVNEDL6trItIDafaEO7OepfkNItGYHNJfk0nrH88Rch5gCkWjM7Wa2hIqnYPPg6SoW/6sgjHAp90ux+tWohrvKCnAWWJDkQJj1/rVM8m9Q/rjdrR7YNrPkRymtRSNT782FaipwG/Vgh7oJk+vytXPMDLiB5PpzO5rdQ1+NGBSmdO5TF74WpMJCyr8tzCs6RjEYhpOqsiw="}
