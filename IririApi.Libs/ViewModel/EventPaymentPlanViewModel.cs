@@ -18,9 +18,9 @@ namespace IririApi.Libs.ViewModel
         public decimal amount { get; set; }
         public string Description { get; set; }
 
-        public string phoneNumber { get; set; }
+       public string phoneNumber { get; set; }
 
 
-        public string paymentReference { get; set; }
+       public string paymentReference { get; set; }
     }
 }

@@ -70,45 +70,9 @@ namespace IririApi.Controllers
                 _paymentService.AddPayment(model, email, custName, phoneNumber, MemberId);
                await _adminService.ActivateMemberAsync(email);
 
-                //var callback = "https://localhost:44312/api/Payment/VerifyPaystackPayment"; 
-
-                ////PAYSTACK AMOUNT IS IN KOBO
-                //var requestObj = new { amount = (amount * 100).ToString(), email, callback };
-
-                //logger.Info("");
-                //logger.Info("------------------------------");
-                //logger.Info("initializing paystack transaction for - " + email + " , amount - " + amount);
 
 
-
-                //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11
-                //                                | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
-
-
-
-
-                //var result = await ApiHelper.paystackUrl
-                //    .AppendPathSegment("transaction/initialize")
-                //    .WithOAuthBearerToken(ApiHelper.PaystackSecretKey)
-                //    .PostJsonAsync(requestObj)
-                //    .ReceiveJson<InitializeTransaction.InitializeTransactionResponseModel>();
-
-
-
-                //if (result.status)
-                //{
-                //    logger.Info("paystack initialisation was successful");
-
-                //    _paymentService.AddPayment(model, email, custName, phoneNumber, MemberId);
-
-                //    logger.Info("Callback Url - " + callback);
-                //    logger.Info("now redirecting to paystack site - " + result.data.authorization_url);
-
-                //    return Ok(new { url = result.data.authorization_url });
-
-                //}
-
-                return RedirectToAction("");
+                return Ok();
 
             }
             catch (Exception ex)

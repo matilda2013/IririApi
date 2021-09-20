@@ -24,10 +24,12 @@ namespace IririApi.Libs.Service
             _payrepository = new Repository<EventPaymentPlan>(DbContext);
         }
 
-        public void AddPayment(EventPaymentPlanViewModel eventTransaction, string email, string custName, string phoneNumber, string MemberId)
+        public void AddPayment(PayForEvent eventTransaction, string email, string custName, string phoneNumber, string MemberId)
         {
+           
             try
             {
+              
                 var result = new EventPaymentPlan();
 
                 result.MembershipId = MemberId;

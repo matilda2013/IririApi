@@ -12,7 +12,7 @@ namespace IririApi.Libs.Inteface.IService
     public interface IEventPaymentDuesService
     {
 
-        void AddPayment(EventPaymentPlanViewModel eventTransaction, string email, string custName, string phoneNumber, string MemberId);
+        void AddPayment(PayForEvent eventTransaction, string email, string custName, string phoneNumber, string MemberId);
 
         EventPaymentTracker ViewEventPaymentsByIdAsync(string id);
     }

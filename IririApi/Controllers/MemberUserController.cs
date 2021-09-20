@@ -105,6 +105,23 @@ namespace IririApi.Controllers
 
 
 
+
+        [HttpPost]
+        [Route("ChangePassword")]
+
+        public async Task ChangeMemberPassword([FromBody] ChangePasswordViewModel model)
+        {
+
+            ArgumentGuard.NotNullOrEmpty(model.Email, nameof(model.Email));
+            ArgumentGuard.NotNullOrEmpty(model.OldPassword, nameof(model.OldPassword));
+            ArgumentGuard.NotNullOrEmpty(model.NewPassword, nameof(model.NewPassword));
+
+            await _userAccountService.changeMemberPasswordAsync(model);
+
+
+        }
+
+
         [HttpPost]
         [Route("Login")]
        

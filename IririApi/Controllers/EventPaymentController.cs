@@ -41,61 +41,21 @@ namespace IririApi.Controllers
        
         [Route("PayEventDues")]
 
-        public async Task<ActionResult> PayStackGateway(EventPaymentPlanViewModel model)
-            {
+        public async Task<ActionResult> PayStackGateway(PayForEvent model)
+        {
 
                 try
                 {
+                var Username = await _userManager.FindByEmailAsync(model.email);
 
-                    decimal amount = model.amount;
-
-
-                    string userId = User.Claims.First(c => c.Type == "UserID").Value;
-                    var Username = await _userManager.FindByIdAsync(userId);
-                    var email = model.emailAddress;
-                  var phoneNumber = Username.PhoneNumber;
-                  var custName = Username.FirstName + " " + Username.LastName;
+                var email = model.email;
+                var custName = Username.FirstName + " " + Username.LastName;
+                var phone = Username.MemberPhone;
                 var MemberId = Username.Id;
 
-                var callback = "https://localhost:44312/api/Payment/VerifyPaystackPayment";
+                 _paymentService.AddPayment(model, email, custName, phone, MemberId);
 
-                    //PAYSTACK AMOUNT IS IN KOBO
-                    var requestObj = new { amount = (amount * 100).ToString(), email, callback };
-
-                    logger.Info("");
-                    logger.Info("------------------------------");
-                    logger.Info("initializing paystack transaction for - " + email + " , amount - " + amount);
-
-
-
-                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11
-                                                    | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
-
-
-
-
-                    var result = await ApiHelper.paystackUrl
-                        .AppendPathSegment("transaction/initialize")
-                        .WithOAuthBearerToken(ApiHelper.PaystackSecretKey)
-                        .PostJsonAsync(requestObj)
-                        .ReceiveJson<InitializeTransaction.InitializeTransactionResponseModel>();
-
-
-
-                    if (result.status)
-                    {
-                        logger.Info("paystack initialisation was successful");
-
-                        _paymentService.AddPayment(model, email, custName, phoneNumber, MemberId);
-
-                        logger.Info("Callback Url - " + callback);
-                        logger.Info("now redirecting to paystack site - " + result.data.authorization_url);
-
-                        return Ok(new { url = result.data.authorization_url });
-
-                    }
-
-                    return RedirectToAction("");
+                return Ok();
 
                 }
                 catch (Exception ex)

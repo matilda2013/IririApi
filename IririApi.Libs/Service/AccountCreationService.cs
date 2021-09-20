@@ -225,6 +225,20 @@ namespace IririApi.Libs.Service
             }
         }
 
+
+        public async Task changeMemberPasswordAsync(ChangePasswordViewModel model)
+        {
+            var user = await _userManager.FindByNameAsync(model.Email);
+
+            var mycode = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+
+            var result = await _userManager.ResetPasswordAsync(user, mycode, model.OldPassword);
+            await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+
+        }  
+
+
         public string RandomString(int length)
         {
             Random random = new Random();

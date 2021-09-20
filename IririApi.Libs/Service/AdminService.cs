@@ -412,18 +412,11 @@ namespace IririApi.Libs.Service
             MemberUser.Status = "Active";
             MemberUser.EmailConfirmed = true;
 
-            dynamic oldpass = "Password1";
+     
             dynamic randpass = GeneratePassword();
             var mycode = await _userManager.GeneratePasswordResetTokenAsync(MemberUser);
             await _userManager.ResetPasswordAsync(MemberUser, mycode, randpass);
-            // await _userManager.ChangePasswordAsync(MemberUser,oldpass,randpass);
-            //var newPasswordHash = this.PasswordHasher.HashPassword(newPassword);
             await _userManager.UpdateAsync(MemberUser);
-
-
-
-
-
 
 
             //Save Credentials on Identity
