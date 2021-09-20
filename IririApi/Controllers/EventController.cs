@@ -288,6 +288,27 @@ namespace IririApi.Controllers
             return _eventService.ViewGalleryAsync();
         }
 
+
+        [HttpGet]
+        [Route("GetAllTeaserEvent")]
+        public List<EventModel> GetAllTeaserEvent()
+        {
+            return _eventService.ViewAllTeaserEvent();
+        }
+
+
+
+
+
+        [HttpGet]
+        [Route("MakeTeaser")]
+        public HttpResponseMessage MakeTeaser(Guid id)
+        {
+            return _eventService.TeaserById(id);
+        }
+
+
+
         private string UploadedGalleryFile( string base64, string title, string Event)
         {
           

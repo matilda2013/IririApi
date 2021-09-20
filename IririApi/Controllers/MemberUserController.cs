@@ -108,7 +108,7 @@ namespace IririApi.Controllers
         [HttpPost]
         [Route("Login")]
        
-        public async Task<IActionResult> Login([FromForm] LoginModel model)
+        public async Task<IActionResult> Login( LoginModel model)
         {
 
             MemberRegistrationUser user = await _userManager.FindByEmailAsync(model.UserName);

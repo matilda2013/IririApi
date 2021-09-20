@@ -410,24 +410,18 @@ namespace IririApi.Libs.Service
         {
             dynamic MemberUser = await _userManager.FindByNameAsync(email);
             MemberUser.Status = "Active";
-            
-       
+            MemberUser.EmailConfirmed = true;
 
-
-            
             dynamic oldpass = "Password1";
             dynamic randpass = GeneratePassword();
-
-       
-
-            //if(MemberUser.PasswordHash == null)
-            //{
-            //    MemberUser.PasswordHash = randpass;
-            //}
-            await _userManager.ChangePasswordAsync(MemberUser,oldpass,randpass);
+            var mycode = await _userManager.GeneratePasswordResetTokenAsync(MemberUser);
+            await _userManager.ResetPasswordAsync(MemberUser, mycode, randpass);
+            // await _userManager.ChangePasswordAsync(MemberUser,oldpass,randpass);
             //var newPasswordHash = this.PasswordHasher.HashPassword(newPassword);
             await _userManager.UpdateAsync(MemberUser);
-           
+
+
+
 
 
 
@@ -435,8 +429,8 @@ namespace IririApi.Libs.Service
             //Save Credentials on Identity
             try
             {
-               // var result = await _userManager.CreateAsync(MemberUser, password);
-               var result = await _userManager.UpdateAsync(MemberUser);
+                // var result = await _userManager.CreateAsync(MemberUser, password);
+                var result = await _userManager.UpdateAsync(MemberUser);
 
                 if (result.Succeeded)
                 {
@@ -472,9 +466,9 @@ namespace IririApi.Libs.Service
                             );
 
 
-              
-              SendSimpleMessage(messageBody,email);
-              
+
+                SendSimpleMessage(messageBody, email);
+
 
             }
             catch (Exception ex)

@@ -66,6 +66,7 @@ namespace IririApi.Libs.Service
                     myevent.EventDescription = eventModel.EventDescription;
                     myevent.Amount = eventModel.Amount;
                     myevent.Date = eventModel.Date;
+                    
 
                    _DbContext.SaveChanges();
                     var response = new HttpResponseMessage();
@@ -410,7 +411,32 @@ namespace IririApi.Libs.Service
 
         }
 
+       
 
+        public HttpResponseMessage TeaserById(Guid id)
+        {
+            EventModel myevent = _DbContext.EventModels.FirstOrDefault(e => e.EventId == id);
+           
+            myevent.isTeaser = true;
+            myevent.EventPicture = myevent.EventPicture;
+            myevent.EventTitle = myevent.EventTitle;
+            myevent.EventVenue = myevent.EventVenue;
+            myevent.EventDescription = myevent.EventDescription;
+            myevent.Amount = myevent.Amount;
+            myevent.Date = myevent.Date;
+
+
+            _DbContext.SaveChanges();
+            var response = new HttpResponseMessage();
+            response.Headers.Add("UpdateMessage", "Successfuly Updated!!!");
+            return response;
+        }
+
+        List<EventModel> IEventService.ViewAllTeaserEvent()
+        {
+            var eventList = _eventrepository.GetAll(y => y.isTeaser == true);
+            return eventList.ToList();
+        }
     }
 }
 

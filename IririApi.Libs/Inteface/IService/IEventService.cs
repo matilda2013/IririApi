@@ -14,10 +14,13 @@ namespace IririApi.Libs.Model.IService
 
    
         EventViewModel ViewEventsByIdAsync(Guid id);
-  
+
+        HttpResponseMessage TeaserById(Guid id);
 
         List<EventModel> ViewPastEventsAsync();
-       
+
+        List<EventModel> ViewAllTeaserEvent();
+
         List<EventModel> ViewUpcomingEventsAsync();
 
 
