@@ -41,7 +41,7 @@ namespace IririApi.Controllers
         [HttpPost]
        [Route("RegisterAdmin")]
   
-        public async Task PostAdminUser([FromBody]MemberUserViewModel model)
+        public async Task PostAdminUser([FromBody] AdminUserViewModel model)
         {
 
             ArgumentGuard.NotNullOrEmpty(model.FirstName, nameof(model.FirstName));
@@ -49,6 +49,9 @@ namespace IririApi.Controllers
             ArgumentGuard.NotNullOrEmpty(model.LastName, nameof(model.LastName));
 
             ArgumentGuard.NotNullOrEmpty(model.MemberEmail, nameof(model.MemberEmail));
+
+            ArgumentGuard.NotNullOrEmpty(model.Password, nameof(model.Password));
+
 
 
             await _userAccountService.RegisterAdminUserAsync(model);

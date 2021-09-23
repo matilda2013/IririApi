@@ -33,11 +33,13 @@ namespace IririApi.Libs.Service
         {
             _userManager = userManager;
             _DbContext = DbContext;
-            _emailrepository = new Repository<EmailLog>(DbContext);
+       
         }
-        public async Task RegisterAdminUserAsync(MemberUserViewModel model)
+        public async Task RegisterAdminUserAsync(AdminUserViewModel model)
         {
-           // model.Role = "Admin";
+            // model.Role = "Admin";
+
+                
 
             var MemberUser = new MemberRegistrationUser()
             {
@@ -46,6 +48,7 @@ namespace IririApi.Libs.Service
                 UserName = model.MemberEmail,
                 MemberEmail = model.MemberEmail,
                 Email = model.MemberEmail,
+               
                 //MemberId = Guid.NewGuid(),
                 MemberPhone = model.MemberPhone,
                 Gender = model.Gender,
@@ -54,26 +57,20 @@ namespace IririApi.Libs.Service
                 DOB = model.DOB,
                 Occupation = model.Occupation,
                 //CardNo = model.CardNo,
-              //  Status = model.Status,
+               EmailConfirmed = true,
                 CreatedAt = DateTime.Now,
                 CreatedBy = model.MemberEmail,
                 IsPasswordChangeRequired = true,
 
 
             };
+          
 
             try
             {
-                var result = await _userManager.CreateAsync(MemberUser);
+                var result = await _userManager.CreateAsync(MemberUser,model.Password);
                 await _userManager.AddToRoleAsync(MemberUser, "Admin");
-                var resp = await SendConfirmRegistrationMail(MemberUser.Email);
-
-                if (!resp)
-                {
-
-                    throw new ObjectNotFoundException($"Couldn't Send Confirmation Email. Attempt to Login to resend confirmation link");
-                }
-
+                
             }
             catch (Exception ex)
             {
