@@ -52,8 +52,10 @@ namespace IririApi
 
 
             services.AddDbContext<AuthenticationContext>(options =>
+                  
+            options.UseSqlServer("Data Source=ICT-56;Database=IririDb;Persist security info=True;Integrated Security=SSPI"));
 
-            options.UseSqlServer("Data Source=ICT-22\\SQLEXPRESS;Initial Catalog=IrirDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;"));
+            // options.UseSqlServer("Data Source=ICT-22\\SQLEXPRESS;Initial Catalog=IrirDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;"));
 
             // options.UseSqlServer("Data Source=192.168.4.3;Database=IririDb;Persist security info=True;User Id=Epayplus;Password=Ep@yplusng.com"));
 
