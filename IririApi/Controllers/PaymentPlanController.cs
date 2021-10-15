@@ -34,16 +34,15 @@ namespace IririApi.Controllers
         public HttpResponseMessage AddPaymentPlan([FromBody] PaymentPlan model)
         {
            
-
             return _payplanService.AddPaymentPlanAsync(model);
         }
 
         
         [HttpPut]
         [Route("EditPaymentPlan")]
-        public HttpResponseMessage UpdateEventDue(Guid id, PaymentPlanViewModel model)
+        public HttpResponseMessage UpdateEventDue( [FromBody] EditPlanViewModel model)
         {
-            return _payplanService.UpdatePaymentPlanAsync(id, model);
+            return _payplanService.UpdatePaymentPlanAsync(model);
 
         }
 
@@ -55,8 +54,14 @@ namespace IririApi.Controllers
 
         }
 
+        [HttpGet]
 
+        [Route("GetPaymentPlanById")]
+        public IList<PaymentPlan> GetPaymentPlanById(Guid id)
+        {
+            return _payplanService.GetPaymentById(id);
 
+        }
 
     }
 }

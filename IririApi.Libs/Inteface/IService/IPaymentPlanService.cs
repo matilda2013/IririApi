@@ -17,8 +17,9 @@ namespace IririApi.Libs.Inteface.IService
         HttpResponseMessage AddPaymentPlanAsync(PaymentPlan model);
 
         HttpResponseMessage DeletePaymentPlanAsync(Guid id);
+         List<PaymentPlan> GetPaymentById(Guid id);
 
 
-        HttpResponseMessage UpdatePaymentPlanAsync(Guid id, PaymentPlanViewModel payplanModel);
+        HttpResponseMessage UpdatePaymentPlanAsync(EditPlanViewModel payplanModel);
     }
 }

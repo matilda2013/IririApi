@@ -53,9 +53,9 @@ namespace IririApi
 
             services.AddDbContext<AuthenticationContext>(options =>
 
-            options.UseSqlServer("Data Source=ICT-22\\SQLEXPRESS;Initial Catalog=IrirDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;"));
-
-            // options.UseSqlServer("Data Source=192.168.4.3;Database=IririDb;Persist security info=True;User Id=Epayplus;Password=Ep@yplusng.com"));
+          options.UseSqlServer("Data Source=ICT-22\\SQLEXPRESS;Initial Catalog=IrirDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;"));
+          //  options.UseSqlServer("Data Source=SQL5061.site4now.net;Initial Catalog=db_a74b24_iriridb;User Id=db_a74b24_iriridb_admin;Password=Password1@"));
+          // options.UseSqlServer("Data Source=192.168.4.3;Database=IririDb;Persist security info=True;User Id=Epayplus;Password=Ep@yplusng.com"));
 
             services.AddIdentityCore<MemberRegistrationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                .AddRoles<IdentityRole>()
@@ -117,6 +117,7 @@ namespace IririApi
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "IririApi v1"));
+               // app.UseSwaggerUI(c => c.SwaggerEndpoint("/api/swagger/v1/swagger.json", "IririApi v1"));
             }
 
 

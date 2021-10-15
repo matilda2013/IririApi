@@ -250,9 +250,10 @@ namespace IririApi.Libs.Service
 
             //Send Mail Containing Plan and Amount
             string body = "Dear " + name + ", your registration request has been approved. Kindly complete your registration by paying the sum of " + amount + " for " + plan + " subscription plan with the link below \n \n";
-            body = body + "https://localhost:44313/Paystack?email=" + email; //+ "&plan=" + plan + "&amount=" + amount + "&name=" + name;
-
-             SendApproveMessage(email,  body);
+            body = body + "https://iriridc.com/Paystack?email=" + email; //+ "&plan=" + plan + "&amount=" + amount + "&name=" + name;
+            //send here naa
+            SendSimpleMessage2(body, email);
+            // SendApproveMessage(email,  body);
             return response;
 
         }
@@ -300,6 +301,38 @@ namespace IririApi.Libs.Service
             }
             return res;
 
+
+        }
+        public void SendSimpleMessage2(string body, string email)
+        {
+            try
+            {
+                MailMessage mail = new MailMessage();
+
+                //set the addresses 
+                mail.From = new MailAddress("developer@iriridc.com"); //IMPORTANT: This must be same as your smtp authentication address.
+                mail.To.Add(email);
+
+                //set the content 
+                mail.Subject = "Welcome To IRIRDC";
+                mail.Body = body;
+               // mail.IsBodyHtml = true;
+                //send the message 
+                SmtpClient smtp = new SmtpClient("mail5015.site4now.net");
+
+                //IMPORANT:  Your smtp login email MUST be same as your FROM address. 
+                NetworkCredential Credentials = new NetworkCredential("developer@iriridc.com", "Password1@");
+                smtp.UseDefaultCredentials = false;
+                smtp.Credentials = Credentials;
+                smtp.Port = 25;    //alternative port number is 8889
+                smtp.EnableSsl = false;
+                smtp.Send(mail);
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message + " " + ex.InnerException;
+                throw ex;
+            }
 
         }
         public async Task<bool> SendMail2(string email, string subject, string body)

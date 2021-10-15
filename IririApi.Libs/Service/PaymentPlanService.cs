@@ -27,17 +27,17 @@ namespace IririApi.Libs.Service
         }
 
 
-        public HttpResponseMessage UpdatePaymentPlanAsync(Guid id, PaymentPlanViewModel payplanModel)
+        public HttpResponseMessage UpdatePaymentPlanAsync(EditPlanViewModel payplanModel)
         {
             try
             {
 
 
-                PaymentPlan myplan = _DbContext.PaymentPlans.FirstOrDefault(e => e.PaymentPlanId == id);
+                PaymentPlan myplan = _DbContext.PaymentPlans.FirstOrDefault(e => e.PaymentPlanId == payplanModel.PaymentPlanId);
 
                 if (myplan == null)
                 {
-                    throw new ObjectNotFoundException($"No PaymentPlan With id{id} exists");
+                    throw new ObjectNotFoundException($"No PaymentPlan With id{ payplanModel.PaymentPlanId} exists");
                 }
 
                 else
@@ -140,5 +140,10 @@ namespace IririApi.Libs.Service
 
         }
 
+        public List<PaymentPlan> GetPaymentById(Guid id)
+        {
+            var payplanList = _paymentPlanrepository.GetAll(c=>c.PaymentPlanId ==id);
+            return payplanList.ToList();
+        }
     }
 }
