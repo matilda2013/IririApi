@@ -25,6 +25,7 @@ using IririApi.Libs.Model.IService;
 using IririApi.Libs.Service;
 using IririApi.Libs.Repository;
 using IririApi.Libs.Model.IRepository;
+using Microsoft.AspNet.OData.Extensions;
 
 namespace IririApi
 {
@@ -46,7 +47,7 @@ namespace IririApi
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "IririApi", Version = "v1" });
             });
-
+            
 
             services.AddMvc(options => options.EnableEndpointRouting = false);
 
@@ -100,7 +101,7 @@ namespace IririApi
                     ClockSkew = TimeSpan.Zero
                 };
             });
-
+            services.AddOData();
             services.AddControllers().AddNewtonsoftJson(options =>
             options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
@@ -139,7 +140,9 @@ namespace IririApi
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.EnableDependencyInjection();
                 endpoints.MapControllers();
+                endpoints.Select().Count().Filter().OrderBy().MaxTop(100).SkipToken().Expand();
             });
         }
 

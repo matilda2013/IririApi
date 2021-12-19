@@ -2,6 +2,7 @@
 using IririApi.Libs.Model;
 using IririApi.Libs.Model.IService;
 using IririApi.Libs.ViewModel;
+using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -99,7 +100,9 @@ namespace IririApi.Controllers
         }
 
         [HttpGet]
+
         [Route("ViewEvents")]
+        
         public List<EventModel> GetAllEvents()
         {
             return _eventService.ViewAllEventsAsync();
